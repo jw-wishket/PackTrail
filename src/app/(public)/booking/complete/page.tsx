@@ -1,10 +1,11 @@
 'use client';
 
+import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Check } from 'lucide-react';
 
-export default function BookingCompletePage() {
+function BookingCompleteContent() {
   const searchParams = useSearchParams();
   const reservationId = searchParams.get('id');
 
@@ -60,5 +61,13 @@ export default function BookingCompletePage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function BookingCompletePage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <BookingCompleteContent />
+    </Suspense>
   );
 }

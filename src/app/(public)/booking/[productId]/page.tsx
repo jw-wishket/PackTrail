@@ -208,11 +208,13 @@ export default function BookingPage() {
 
   return (
     <div className="min-h-screen bg-cream">
-      {/* Mobile step indicator */}
-      <BookingStepIndicator currentStep={step} completedSteps={completedSteps} />
+      {/* Mobile step indicator (hidden on desktop) */}
+      <div className="lg:hidden">
+        <BookingStepIndicator currentStep={step} completedSteps={completedSteps} />
+      </div>
 
       <div className="flex">
-        {/* Desktop step indicator sidebar */}
+        {/* Desktop step indicator sidebar (hidden on mobile) */}
         <div className="hidden lg:block shrink-0">
           <div className="sticky top-16">
             <BookingStepIndicator currentStep={step} completedSteps={completedSteps} />

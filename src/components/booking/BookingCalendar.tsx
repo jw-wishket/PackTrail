@@ -88,8 +88,8 @@ export function BookingCalendar({ rentalType, selectedDate, onSelect }: BookingC
         캠핑 시작일을 선택하면 종료일이 자동으로 설정됩니다.
       </p>
 
-      <div className="mt-4 flex justify-center">
-        <div className="rounded-xl border border-beige bg-white p-4">
+      <div className="mt-4">
+        <div className="rounded-xl border border-beige bg-white p-5 sm:p-6 max-w-md mx-auto">
           {loading && (
             <div className="text-center text-sm text-sage py-2 animate-pulse">
               가용성 확인 중...
@@ -106,11 +106,40 @@ export function BookingCalendar({ rentalType, selectedDate, onSelect }: BookingC
             modifiers={modifiers}
             modifiersClassNames={modifiersClassNames}
             classNames={{
-              today: 'font-bold text-olive',
-              selected: 'bg-olive text-white rounded-xl font-bold',
-              disabled: 'text-muted/50 line-through',
+              months: 'w-full',
+              month_caption: 'flex justify-center items-center mb-4',
+              caption_label: 'text-lg font-bold text-moss',
+              nav: 'flex items-center gap-2',
+              button_previous: 'p-1.5 rounded-lg hover:bg-beige text-sage transition-colors',
+              button_next: 'p-1.5 rounded-lg hover:bg-beige text-sage transition-colors',
+              weekdays: 'grid grid-cols-7 mb-2',
+              weekday: 'text-center text-sm font-semibold text-sage py-2',
+              weeks: 'space-y-1',
+              week: 'grid grid-cols-7',
+              day: 'text-center',
+              day_button: 'w-10 h-10 sm:w-12 sm:h-12 rounded-lg text-sm sm:text-base font-medium text-moss hover:bg-olive/10 transition-colors flex items-center justify-center mx-auto',
+              today: 'font-bold text-olive ring-2 ring-olive/30 rounded-lg',
+              selected: 'bg-olive text-white rounded-lg font-bold hover:bg-olive/90',
+              disabled: 'text-gray-300 line-through hover:bg-transparent cursor-not-allowed',
+              outside: 'text-gray-200',
             }}
           />
+
+          {/* 범례 */}
+          <div className="flex items-center justify-center gap-4 mt-4 pt-3 border-t border-beige">
+            <div className="flex items-center gap-1.5">
+              <span className="w-3 h-3 rounded-sm bg-olive" />
+              <span className="text-xs text-sage">시작일</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="w-3 h-3 rounded-sm bg-olive/15" />
+              <span className="text-xs text-sage">종료일</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="w-3 h-3 rounded-sm bg-gray-200" />
+              <span className="text-xs text-sage">예약 불가</span>
+            </div>
+          </div>
         </div>
       </div>
 

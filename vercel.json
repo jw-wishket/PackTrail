@@ -1,0 +1,9 @@
+{
+  "crons": [
+    { "path": "/api/cron/expire-holdings", "schedule": "* * * * *" },
+    { "path": "/api/cron/sync-holidays", "schedule": "0 0 1 12 *" }
+  ],
+  "headers": [
+    { "source": "/api/(.*)", "headers": [{ "key": "Cache-Control", "value": "no-store" }] }
+  ]
+}

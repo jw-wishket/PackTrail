@@ -46,6 +46,21 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* PackTrail design tokens */
+  --color-moss: #3A5A3A;
+  --color-olive: #7BA35E;
+  --color-sage: #6B7C6B;
+  --color-cream: #F7F3EC;
+  --color-beige: #EDE8DD;
+  --color-price-green: #5A8A3C;
+  --color-status-blue: #3A8AC8;
+  --color-status-purple: #8B5CF6;
+  --color-warning: #E8743A;
+  --color-holding: #B8860B;
+  --color-muted: #A0ADA0;
+  --color-footer-dark: #2D4A2D;
+  --color-admin-bg: #F4F4F5;
 }
 
 :root {
@@ -122,9 +137,15 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-cream text-foreground;
   }
   html {
     @apply font-sans;
+  }
+}
+
+@layer utilities {
+  .container-page {
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
   }
 }

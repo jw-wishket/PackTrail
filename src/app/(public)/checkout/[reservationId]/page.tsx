@@ -8,6 +8,7 @@ import { OrderSummary } from '@/components/booking/OrderSummary';
 import { ScheduleTimeline } from '@/components/booking/ScheduleTimeline';
 import { PaymentTimer } from '@/components/booking/PaymentTimer';
 import { Input } from '@/components/ui/input';
+import { requestPayment } from '@/lib/portone/client';
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                               */
@@ -80,18 +81,39 @@ export default function CheckoutPage() {
     router.push('/products');
   }, [router]);
 
-  const handlePayment = async () => {
+  const handlePayment = async (payMethod: 'NAVER_PAY' | 'KAKAO_PAY') => {
     if (!data) return;
     setSubmitting(true);
     setError(null);
 
     try {
-      // TODO: Task 37 will integrate PortOne payment here
-      // For now, directly confirm the reservation
+      const storeId = process.env.NEXT_PUBLIC_PORTONE_STORE_ID;
+      if (!storeId) throw new Error('PortOne store ID is not configured');
+
+      // Generate a unique payment ID for this attempt
+      const paymentId = `packtrail-${data.reservation.id}-${Date.now()}`;
+
+      const portoneResponse = await requestPayment({
+        storeId,
+        paymentId,
+        orderName: `PackTrail - ${data.reservation.product.name}`,
+        totalAmount: data.reservation.totalPrice,
+        payMethod,
+      });
+
+      if (!portoneResponse || 'code' in portoneResponse) {
+        const msg = portoneResponse && 'message' in portoneResponse
+          ? (portoneResponse as { message?: string }).message
+          : '결제가 취소되었습니다.';
+        setError(msg || '결제가 취소되었습니다.');
+        return;
+      }
+
       const res = await fetch(`/api/reservations/${data.reservation.id}/confirm`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          paymentId,
           deliveryAddress: `${recipientName} / ${phone} / ${address}`,
           deliveryMemo: memo,
         }),
@@ -232,7 +254,7 @@ export default function CheckoutPage() {
             <div className="grid grid-cols-2 gap-3">
               <button
                 type="button"
-                onClick={handlePayment}
+                onClick={() => handlePayment('NAVER_PAY')}
                 disabled={submitting || !isFormValid}
                 className="flex items-center justify-center gap-2 rounded-xl border-2 border-[#03C75A] bg-[#03C75A] py-3.5 text-sm font-bold text-white hover:brightness-110 transition disabled:opacity-40"
               >
@@ -240,7 +262,7 @@ export default function CheckoutPage() {
               </button>
               <button
                 type="button"
-                onClick={handlePayment}
+                onClick={() => handlePayment('KAKAO_PAY')}
                 disabled={submitting || !isFormValid}
                 className="flex items-center justify-center gap-2 rounded-xl border-2 border-[#FEE500] bg-[#FEE500] py-3.5 text-sm font-bold text-[#3C1E1E] hover:brightness-110 transition disabled:opacity-40"
               >

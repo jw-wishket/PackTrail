@@ -45,7 +45,6 @@ export async function GET(request: Request) {
                 prisma.equipmentSet.updateMany({
                   where: {
                     id: setId,
-                    status: 'RESERVED',
                   },
                   data: { status: 'AVAILABLE' },
                 }),

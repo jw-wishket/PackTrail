@@ -13,8 +13,8 @@ export function verifyPortOneSignature(
     .update(body)
     .digest('hex');
 
-  return crypto.timingSafeEqual(
-    Buffer.from(signature),
-    Buffer.from(expected)
-  );
+  const expectedBuf = Buffer.from(expected);
+  const signatureBuf = Buffer.from(signature);
+  if (expectedBuf.length !== signatureBuf.length) return false;
+  return crypto.timingSafeEqual(signatureBuf, expectedBuf);
 }

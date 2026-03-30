@@ -34,6 +34,10 @@ export async function POST(
       return NextResponse.json({ error: 'Reservation is not in HOLDING status' }, { status: 400 });
     }
 
+    if (reservation.holdExpiresAt && new Date(reservation.holdExpiresAt) < new Date()) {
+      return NextResponse.json({ error: 'Hold has expired' }, { status: 410 });
+    }
+
     if (paymentId) {
       const verification = await verifyPayment(paymentId);
       if (!verification.verified) {

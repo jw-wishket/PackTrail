@@ -83,21 +83,19 @@ export async function createReservation(
         const availableSet = await findAvailableSet(tx, blockStartStr, blockEndStr);
         if (!availableSet) throw new SoldOutError();
 
-        // 2. Advisory Lock on set ID
+        // 2. Advisory Lock on the first candidate
         await tx.$executeRaw`SELECT pg_advisory_xact_lock(${availableSet.id})`;
 
-        // 3. Re-check availability after lock
-        const recheck = await findAvailableSet(tx, blockStartStr, blockEndStr);
-        if (!recheck || recheck.id !== availableSet.id) {
-          throw new SoldOutError();
-        }
+        // 3. Re-find available set (may have changed due to concurrent transactions)
+        const confirmedSet = await findAvailableSet(tx, blockStartStr, blockEndStr);
+        if (!confirmedSet) throw new SoldOutError();
 
         // 4. Create reservation
         const holdExpiresAt = new Date(Date.now() + holdMinutes * 60 * 1000);
         const reservation = await tx.reservation.create({
           data: {
             userId: input.userId,
-            equipmentSetId: availableSet.id,
+            equipmentSetId: confirmedSet.id,
             productId: input.productId,
             rentalType: input.rentalType,
             useStartDate: block.useStart,
@@ -118,7 +116,7 @@ export async function createReservation(
             (reservation_id, equipment_set_id, block_range)
           VALUES (
             ${reservation.id}::uuid,
-            ${availableSet.id},
+            ${confirmedSet.id},
             daterange(${blockStartStr}::date, ${blockEndStr}::date, '[]')
           )
         `;
@@ -137,8 +135,8 @@ export async function createReservation(
 
         return {
           reservationId: reservation.id,
-          equipmentSetId: availableSet.id,
-          equipmentSetName: availableSet.name,
+          equipmentSetId: confirmedSet.id,
+          equipmentSetName: confirmedSet.name,
           holdExpiresAt,
           block: {
             useStart: formatDateISO(block.useStart),

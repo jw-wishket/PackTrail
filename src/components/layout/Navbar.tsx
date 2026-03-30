@@ -10,13 +10,26 @@ import { cn } from '@/lib/utils';
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const pathname = usePathname();
   const supabase = createClient();
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+    supabase.auth.getUser().then(({ data }) => {
+      setUser(data.user);
+      if (data.user) {
+        supabase.from('users').select('role').eq('id', data.user.id).single()
+          .then(({ data: profile }) => setIsAdmin(profile?.role === 'ADMIN'));
+      }
+    });
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
+      if (session?.user) {
+        supabase.from('users').select('role').eq('id', session.user.id).single()
+          .then(({ data: profile }) => setIsAdmin(profile?.role === 'ADMIN'));
+      } else {
+        setIsAdmin(false);
+      }
     });
     return () => subscription.unsubscribe();
   }, []);
@@ -56,6 +69,11 @@ export function Navbar() {
           <div className="hidden md:flex items-center gap-3">
             {user ? (
               <>
+                {isAdmin && (
+                  <Link href="/admin" className="text-sm text-cream/70 hover:text-cream font-medium">
+                    관리자
+                  </Link>
+                )}
                 <Link href="/my" className="text-sm text-cream/70 hover:text-cream">
                   마이페이지
                 </Link>
@@ -113,13 +131,24 @@ export function Navbar() {
               </Link>
             ))}
             {user && (
-              <Link
-                href="/my"
-                onClick={() => setMobileOpen(false)}
-                className="block text-sm text-cream/70 hover:text-cream py-1"
-              >
-                마이페이지
-              </Link>
+              <>
+                <Link
+                  href="/my"
+                  onClick={() => setMobileOpen(false)}
+                  className="block text-sm text-cream/70 hover:text-cream py-1"
+                >
+                  마이페이지
+                </Link>
+                {isAdmin && (
+                  <Link
+                    href="/admin"
+                    onClick={() => setMobileOpen(false)}
+                    className="block text-sm text-cream/70 hover:text-cream py-1"
+                  >
+                    관리자
+                  </Link>
+                )}
+              </>
             )}
             <Link
               href="/products"

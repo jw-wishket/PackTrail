@@ -1,41 +1,13 @@
-datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
-}
-
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["postgresqlExtensions"]
 }
 
-enum UserRole {
-  USER
-  ADMIN
-}
-
-enum SetStatus {
-  AVAILABLE
-  PREP
-  SHIPPING
-  IN_USE
-  RETURNING
-  MAINTENANCE
-}
-
-enum RentalType {
-  ONE_NIGHT
-  TWO_NIGHT
-}
-
-enum ReservationStatus {
-  HOLDING
-  CONFIRMED
-  SHIPPING
-  IN_USE
-  RETURNING
-  COMPLETED
-  CANCELLED
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  directUrl  = env("DIRECT_URL")
+  extensions = [uuid_ossp(map: "uuid-ossp", schema: "extensions")]
 }
 
 model User {
@@ -70,61 +42,60 @@ model Product {
 }
 
 model EquipmentSet {
-  id                     Int                @id @default(autoincrement())
-  name                   String             @unique @db.VarChar(100)
-  status                 SetStatus          @default(AVAILABLE)
-  currentReservationId   String?            @unique @map("current_reservation_id") @db.Uuid
-  notes                  String?
-  updatedAt              DateTime           @updatedAt @map("updated_at")
-  currentReservation     Reservation?       @relation("CurrentReservation", fields: [currentReservationId], references: [id])
-  reservations           Reservation[]      @relation("SetReservations")
-  blocks                 ReservationBlock[]
+  id                   Int                @id @default(autoincrement())
+  name                 String             @unique @db.VarChar(100)
+  status               SetStatus          @default(AVAILABLE)
+  currentReservationId String?            @unique @map("current_reservation_id") @db.Uuid
+  notes                String?
+  updatedAt            DateTime           @updatedAt @map("updated_at")
+  currentReservation   Reservation?       @relation("CurrentReservation", fields: [currentReservationId], references: [id])
+  blocks               ReservationBlock[]
+  reservations         Reservation[]      @relation("SetReservations")
 
   @@map("equipment_sets")
 }
 
 model Reservation {
-  id               String              @id @default(uuid()) @db.Uuid
-  userId           String              @map("user_id") @db.Uuid
-  equipmentSetId   Int?                @map("equipment_set_id")
-  productId        Int                 @map("product_id")
-  rentalType       RentalType          @map("rental_type")
-  useStartDate     DateTime            @map("use_start_date") @db.Date
-  useEndDate       DateTime            @map("use_end_date") @db.Date
-  blockStartDate   DateTime            @map("block_start_date") @db.Date
-  blockEndDate     DateTime            @map("block_end_date") @db.Date
-  status           ReservationStatus   @default(HOLDING)
-  totalPrice       Int                 @map("total_price")
-  paymentId        String?             @map("payment_id") @db.VarChar(100)
-  holdExpiresAt    DateTime?           @map("hold_expires_at")
-  deliveryAddress  String?             @map("delivery_address")
-  deliveryMemo     String?             @map("delivery_memo")
-  cancelledAt      DateTime?           @map("cancelled_at")
-  cancelReason     String?             @map("cancel_reason")
-  createdAt        DateTime            @default(now()) @map("created_at")
-  updatedAt        DateTime            @updatedAt @map("updated_at")
-
-  user             User                @relation(fields: [userId], references: [id])
-  equipmentSet     EquipmentSet?       @relation("SetReservations", fields: [equipmentSetId], references: [id])
-  product          Product             @relation(fields: [productId], references: [id])
-  block            ReservationBlock?
-  review           Review?
-  options          ReservationOption[]
-  currentForSet    EquipmentSet?       @relation("CurrentReservation")
+  id              String              @id @default(uuid()) @db.Uuid
+  userId          String              @map("user_id") @db.Uuid
+  equipmentSetId  Int?                @map("equipment_set_id")
+  productId       Int                 @map("product_id")
+  rentalType      RentalType          @map("rental_type")
+  useStartDate    DateTime            @map("use_start_date") @db.Date
+  useEndDate      DateTime            @map("use_end_date") @db.Date
+  blockStartDate  DateTime            @map("block_start_date") @db.Date
+  blockEndDate    DateTime            @map("block_end_date") @db.Date
+  status          ReservationStatus   @default(HOLDING)
+  totalPrice      Int                 @map("total_price")
+  paymentId       String?             @map("payment_id") @db.VarChar(100)
+  holdExpiresAt   DateTime?           @map("hold_expires_at")
+  deliveryAddress String?             @map("delivery_address")
+  deliveryMemo    String?             @map("delivery_memo")
+  cancelledAt     DateTime?           @map("cancelled_at")
+  cancelReason    String?             @map("cancel_reason")
+  createdAt       DateTime            @default(now()) @map("created_at")
+  updatedAt       DateTime            @updatedAt @map("updated_at")
+  currentForSet   EquipmentSet?       @relation("CurrentReservation")
+  block           ReservationBlock?
+  options         ReservationOption[]
+  equipmentSet    EquipmentSet?       @relation("SetReservations", fields: [equipmentSetId], references: [id])
+  product         Product             @relation(fields: [productId], references: [id])
+  user            User                @relation(fields: [userId], references: [id])
+  review          Review?
 
   @@map("reservations")
 }
 
 model ReservationBlock {
-  id               Int          @id @default(autoincrement())
-  reservationId    String       @unique @map("reservation_id") @db.Uuid
-  equipmentSetId   Int          @map("equipment_set_id")
-  blockRange       Unsupported("daterange") @map("block_range")
-  createdAt        DateTime     @default(now()) @map("created_at")
+  id             Int                      @id @default(autoincrement())
+  reservationId  String                   @unique @map("reservation_id") @db.Uuid
+  equipmentSetId Int                      @map("equipment_set_id")
+  blockRange     Unsupported("daterange") @map("block_range")
+  createdAt      DateTime                 @default(now()) @map("created_at")
+  equipmentSet   EquipmentSet             @relation(fields: [equipmentSetId], references: [id])
+  reservation    Reservation              @relation(fields: [reservationId], references: [id])
 
-  reservation      Reservation  @relation(fields: [reservationId], references: [id])
-  equipmentSet     EquipmentSet @relation(fields: [equipmentSetId], references: [id])
-
+  // GiST indexes managed via raw SQL migration (idx_blocks_range, idx_blocks_set_range)
   @@map("reservation_blocks")
 }
 
@@ -141,13 +112,12 @@ model ConsumableOption {
 }
 
 model ReservationOption {
-  reservationId String          @map("reservation_id") @db.Uuid
-  optionId      Int             @map("option_id")
-  quantity      Int             @default(1)
-  priceAtOrder  Int             @map("price_at_order")
-
-  reservation   Reservation     @relation(fields: [reservationId], references: [id])
+  reservationId String           @map("reservation_id") @db.Uuid
+  optionId      Int              @map("option_id")
+  quantity      Int              @default(1)
+  priceAtOrder  Int              @map("price_at_order")
   option        ConsumableOption @relation(fields: [optionId], references: [id])
+  reservation   Reservation      @relation(fields: [reservationId], references: [id])
 
   @@id([reservationId, optionId])
   @@map("reservation_options")
@@ -162,7 +132,6 @@ model Review {
   images        Json        @default("[]")
   isVisible     Boolean     @default(true) @map("is_visible")
   createdAt     DateTime    @default(now()) @map("created_at")
-
   reservation   Reservation @relation(fields: [reservationId], references: [id])
   user          User        @relation(fields: [userId], references: [id])
 
@@ -186,4 +155,33 @@ model SystemSetting {
   updatedAt   DateTime @default(now()) @map("updated_at")
 
   @@map("system_settings")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum SetStatus {
+  AVAILABLE
+  PREP
+  SHIPPING
+  IN_USE
+  RETURNING
+  MAINTENANCE
+}
+
+enum RentalType {
+  ONE_NIGHT
+  TWO_NIGHT
+}
+
+enum ReservationStatus {
+  HOLDING
+  CONFIRMED
+  SHIPPING
+  IN_USE
+  RETURNING
+  COMPLETED
+  CANCELLED
 }

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { ReservationCard } from '@/components/reservations/ReservationCard';
+import { subscribeReservationChanges } from '@/lib/supabase/realtime';
 
 type ReservationStatus = 'HOLDING' | 'CONFIRMED' | 'SHIPPING' | 'IN_USE' | 'RETURNING' | 'COMPLETED' | 'CANCELLED';
 
@@ -45,7 +46,7 @@ export default function MyPage() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<FilterTab>('전체');
 
-  useEffect(() => {
+  function fetchReservations() {
     fetch('/api/my/reservations')
       .then((r) => r.json())
       .then((data) => {
@@ -53,6 +54,18 @@ export default function MyPage() {
         setLoading(false);
       })
       .catch(() => setLoading(false));
+  }
+
+  useEffect(() => {
+    fetchReservations();
+
+    const sub = subscribeReservationChanges(() => {
+      fetchReservations();
+    });
+
+    return () => {
+      sub.unsubscribe();
+    };
   }, []);
 
   const filtered = filterReservations(reservations, activeTab);

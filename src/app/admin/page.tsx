@@ -6,6 +6,7 @@ import StatsCard from '@/components/admin/StatsCard';
 import SetStatusGrid from '@/components/admin/SetStatusGrid';
 import { cn } from '@/lib/utils';
 import { Loader2 } from 'lucide-react';
+import { subscribeReservationChanges, subscribeSetChanges } from '@/lib/supabase/realtime';
 
 interface DashboardData {
   todayReservations: Record<string, number>;
@@ -64,12 +65,29 @@ export default function AdminDashboard() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  function fetchDashboard() {
     fetch('/api/admin/dashboard')
       .then((res) => res.json())
       .then(setData)
       .catch(console.error)
       .finally(() => setLoading(false));
+  }
+
+  useEffect(() => {
+    fetchDashboard();
+
+    const reservationSub = subscribeReservationChanges(() => {
+      fetchDashboard();
+    });
+
+    const setSub = subscribeSetChanges(() => {
+      fetchDashboard();
+    });
+
+    return () => {
+      reservationSub.unsubscribe();
+      setSub.unsubscribe();
+    };
   }, []);
 
   if (loading) {

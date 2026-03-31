@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { addDays } from 'date-fns';
+import { Spinner } from '@/components/ui/spinner';
 import { formatPrice, formatDate } from '@/lib/utils';
 import { OrderSummary } from '@/components/booking/OrderSummary';
 import { ScheduleTimeline } from '@/components/booking/ScheduleTimeline';
@@ -135,8 +136,8 @@ export default function CheckoutPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-cream flex items-center justify-center">
-        <p className="text-sage animate-pulse">불러오는 중...</p>
+      <div className="min-h-screen bg-cream">
+        <Spinner />
       </div>
     );
   }

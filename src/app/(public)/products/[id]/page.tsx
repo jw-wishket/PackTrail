@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { formatPrice, cn } from '@/lib/utils';
+import { Spinner } from '@/components/ui/spinner';
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                               */
@@ -121,8 +122,8 @@ export default function ProductDetailPage() {
   /* ---------- loading / error states ---------- */
   if (loading) {
     return (
-      <div className="min-h-screen bg-cream flex items-center justify-center">
-        <p className="text-sage animate-pulse">불러오는 중...</p>
+      <div className="min-h-screen bg-cream">
+        <Spinner />
       </div>
     );
   }

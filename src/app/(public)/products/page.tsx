@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { ProductCard } from '@/components/products/ProductCard';
 import { ProductFilterTabs } from '@/components/products/ProductFilterTabs';
+import { SkeletonList } from '@/components/ui/skeleton-card';
 
 interface Product {
   id: number;
@@ -51,7 +52,7 @@ export default function ProductsPage() {
 
         {/* Grid */}
         {loading ? (
-          <div className="text-center py-20 text-sage">불러오는 중...</div>
+          <SkeletonList />
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pb-12">
             {filtered.map((product) => (

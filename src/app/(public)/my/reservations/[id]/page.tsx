@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { Spinner } from '@/components/ui/spinner';
 import { addDays } from 'date-fns';
 import { formatPrice, formatDate, formatDateFull } from '@/lib/utils';
 import { ReservationStatusBadge } from '@/components/reservations/ReservationStatusBadge';
@@ -85,8 +86,8 @@ export default function ReservationDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-cream flex items-center justify-center">
-        <p className="text-sage animate-pulse">불러오는 중...</p>
+      <div className="min-h-screen bg-cream">
+        <Spinner />
       </div>
     );
   }

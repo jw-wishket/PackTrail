@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import { Spinner } from '@/components/ui/spinner';
 import { ReservationCard } from '@/components/reservations/ReservationCard';
 import { subscribeReservationChanges } from '@/lib/supabase/realtime';
 
@@ -95,9 +96,7 @@ export default function MyPage() {
         </div>
 
         {loading ? (
-          <div className="py-20 text-center">
-            <p className="text-sage animate-pulse">불러오는 중...</p>
-          </div>
+          <Spinner />
         ) : filtered.length === 0 ? (
           <div className="py-20 text-center">
             <p className="text-sage">예약 내역이 없습니다.</p>

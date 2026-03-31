@@ -34,6 +34,11 @@ export function Navbar() {
     return () => subscription.unsubscribe();
   }, []);
 
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    window.location.href = '/';
+  };
+
   const navLinks = [
     { href: '/products', label: '장비 소개' },
     { href: '/#how-it-works', label: '이용 방법' },
@@ -83,6 +88,9 @@ export function Navbar() {
                 >
                   {user.user_metadata?.name?.[0] || user.email?.[0]?.toUpperCase() || 'U'}
                 </Link>
+                <button onClick={handleLogout} className="text-sm text-cream/50 hover:text-cream">
+                  로그아웃
+                </button>
               </>
             ) : (
               <Link href="/auth/login" className="text-sm text-cream/70 hover:text-cream">
@@ -148,6 +156,12 @@ export function Navbar() {
                     관리자
                   </Link>
                 )}
+                <button
+                  onClick={() => { setMobileOpen(false); handleLogout(); }}
+                  className="flex items-center min-h-[44px] w-full text-sm text-cream/50 hover:text-cream"
+                >
+                  로그아웃
+                </button>
               </>
             )}
             <Link

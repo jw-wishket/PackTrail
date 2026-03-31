@@ -12,52 +12,44 @@ export async function GET(
       return NextResponse.json({ error: 'Invalid product ID' }, { status: 400 });
     }
 
-    const product = await prisma.product.findUnique({
-      where: { id: productId, isActive: true },
-      include: {
-        sets: { select: { id: true, status: true } },
-      },
-    });
+    const [product, reviews, consumableOptions] = await Promise.all([
+      prisma.product.findUnique({
+        where: { id: productId, isActive: true },
+        include: { sets: { select: { id: true, status: true } } },
+      }),
+      prisma.review.findMany({
+        where: {
+          isVisible: true,
+          reservation: { productId },
+        },
+        orderBy: { createdAt: 'desc' },
+        take: 20,
+        select: {
+          id: true,
+          rating: true,
+          content: true,
+          images: true,
+          createdAt: true,
+          user: { select: { name: true } },
+        },
+      }),
+      prisma.consumableOption.findMany({
+        where: { isActive: true },
+        orderBy: { sortOrder: 'asc' },
+      }),
+    ]);
 
     if (!product) {
       return NextResponse.json({ error: 'Product not found' }, { status: 404 });
     }
 
-    // Fetch reviews for this product
-    const reviews = await prisma.review.findMany({
-      where: {
-        isVisible: true,
-        reservation: { productId },
-      },
-      orderBy: { createdAt: 'desc' },
-      take: 20,
-      select: {
-        id: true,
-        rating: true,
-        content: true,
-        images: true,
-        createdAt: true,
-        user: {
-          select: { name: true },
-        },
-      },
-    });
-
-    // Calculate average rating
     const avgRating = reviews.length > 0
       ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
       : 0;
 
-    // Fetch consumable options
-    const consumableOptions = await prisma.consumableOption.findMany({
-      where: { isActive: true },
-      orderBy: { sortOrder: 'asc' },
-    });
-
     const setCount = product.sets.length;
     const availableSets = product.sets.filter((s) => s.status === 'AVAILABLE').length;
 
-    // Strip sets from the product object to keep response clean
     const { sets, ...productData } = product;
 
     return NextResponse.json({

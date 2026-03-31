@@ -223,7 +223,7 @@ export default function AdminReservationDetailPage() {
               <ul className="mt-1 space-y-1">
                 {reservation.options.map((opt, i) => (
                   <li key={i} className="text-sm">
-                    {opt.option.name} x{opt.quantity} ({(opt.priceAtOrder ?? opt.option.price ?? 0).toLocaleString()}원)
+                    {opt.option.name} x{opt.quantity} ({((opt as any).priceAtOrder ?? (opt as any).unitPrice ?? 0).toLocaleString()}원)
                   </li>
                 ))}
               </ul>

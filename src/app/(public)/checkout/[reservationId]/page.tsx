@@ -82,16 +82,22 @@ export default function CheckoutPage() {
     router.push('/products');
   }, [router]);
 
+  const [showPaymentNotice, setShowPaymentNotice] = useState(false);
+
   const handlePayment = async (payMethod: 'NAVER_PAY' | 'KAKAO_PAY') => {
     if (!data) return;
+
+    // PortOne 미연동 시 안내 표시
+    const storeId = process.env.NEXT_PUBLIC_PORTONE_STORE_ID;
+    if (!storeId) {
+      setShowPaymentNotice(true);
+      return;
+    }
+
     setSubmitting(true);
     setError(null);
 
     try {
-      const storeId = process.env.NEXT_PUBLIC_PORTONE_STORE_ID;
-      if (!storeId) throw new Error('PortOne store ID is not configured');
-
-      // Generate a unique payment ID for this attempt
       const paymentId = `packtrail-${data.reservation.id}-${Date.now()}`;
 
       const portoneResponse = await requestPayment({
@@ -278,6 +284,34 @@ export default function CheckoutPage() {
           {error && (
             <div className="rounded-xl bg-destructive/10 px-4 py-3 text-sm text-destructive">
               {error}
+            </div>
+          )}
+
+          {/* PortOne 미연동 안내 */}
+          {showPaymentNotice && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+              <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl">
+                <div className="text-center mb-4">
+                  <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-olive/10">
+                    <span className="text-2xl">💳</span>
+                  </div>
+                  <h3 className="text-lg font-bold text-moss">결제 서비스 준비 중</h3>
+                </div>
+                <p className="text-sm text-sage text-center leading-relaxed mb-5">
+                  현재 결제 시스템 연동이 준비 중입니다.<br />
+                  실제 결제는 서비스 오픈 후 이용하실 수 있습니다.<br />
+                  <span className="text-muted text-xs mt-2 block">
+                    네이버페이 / 카카오페이 결제가 지원될 예정입니다.
+                  </span>
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setShowPaymentNotice(false)}
+                  className="w-full rounded-xl bg-olive py-3 text-sm font-bold text-white hover:bg-olive/90 transition-colors"
+                >
+                  확인
+                </button>
+              </div>
             </div>
           )}
         </div>

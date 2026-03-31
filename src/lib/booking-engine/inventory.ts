@@ -1,5 +1,7 @@
 import { prisma } from '@/lib/prisma';
-import { calculateBlockPeriod, type BlockPeriod } from './block-calculator';
+import { calculateBlockPeriod, calculateBlockPeriodSync, type BlockPeriod } from './block-calculator';
+import { getHolidaySet } from './business-days';
+import { getSystemSettings } from './settings';
 import { formatDateISO } from '@/lib/utils';
 
 async function getSetIdsForProduct(productId: number): Promise<number[]> {
@@ -15,8 +17,12 @@ export async function getAvailableSetCount(
   rentalType: 'ONE_NIGHT' | 'TWO_NIGHT',
   productId: number
 ): Promise<number> {
-  const block = await calculateBlockPeriod(targetDate, rentalType);
-  const setIds = await getSetIdsForProduct(productId);
+  const [settings, holidays, setIds] = await Promise.all([
+    getSystemSettings(),
+    getHolidaySet(),
+    getSetIdsForProduct(productId),
+  ]);
+  const block = calculateBlockPeriodSync(targetDate, rentalType, settings, holidays);
   const totalSets = setIds.length;
 
   if (setIds.length === 0) return 0;
@@ -46,7 +52,11 @@ export async function getMonthlyAvailability(
   rentalType: 'ONE_NIGHT' | 'TWO_NIGHT',
   productId: number
 ): Promise<Map<string, DayAvailability>> {
-  const setIds = await getSetIdsForProduct(productId);
+  const [setIds, settings, holidays] = await Promise.all([
+    getSetIdsForProduct(productId),
+    getSystemSettings(),
+    getHolidaySet(),
+  ]);
   const totalSets = setIds.length;
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const availability = new Map<string, DayAvailability>();
@@ -91,7 +101,7 @@ export async function getMonthlyAvailability(
     const dateStr = formatDateISO(date);
 
     // Calculate what the block period would be if someone booked this date
-    const block = await calculateBlockPeriod(date, rentalType);
+    const block = calculateBlockPeriodSync(date, rentalType, settings, holidays);
     const blockStartStr = formatDateISO(block.blockStart);
     const blockEndStr = formatDateISO(block.blockEnd);
 

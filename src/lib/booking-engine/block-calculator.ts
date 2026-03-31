@@ -1,4 +1,4 @@
-import { addBusinessDays, subtractBusinessDays, addBusinessDaysWithHolidays, subtractBusinessDaysWithHolidays } from './business-days';
+import { addBusinessDays, subtractBusinessDays, addBusinessDaysWithHolidays, subtractBusinessDaysWithHolidays, addBusinessDaysSync, subtractBusinessDaysSync } from './business-days';
 import { getSystemSettings } from './settings';
 import { formatDateISO } from '@/lib/utils';
 
@@ -24,6 +24,33 @@ export async function calculateBlockPeriod(
 
   const blockStart = await subtractBusinessDays(useStartDate, preUseDays);
   const blockEnd = await addBusinessDays(useEnd, postUseDays);
+
+  return {
+    useStart: useStartDate,
+    useEnd,
+    blockStart,
+    blockEnd,
+    blockRange: `[${formatDateISO(blockStart)}, ${formatDateISO(blockEnd)}]`,
+  };
+}
+
+export interface SystemSettingsLike {
+  PRE_USE_BUSINESS_DAYS: number;
+  POST_USE_BUSINESS_DAYS: number;
+}
+
+export function calculateBlockPeriodSync(
+  useStartDate: Date,
+  rentalType: 'ONE_NIGHT' | 'TWO_NIGHT',
+  settings: SystemSettingsLike,
+  holidays: Set<string>
+): BlockPeriod {
+  const nights = rentalType === 'TWO_NIGHT' ? 2 : 1;
+  const useEnd = new Date(useStartDate);
+  useEnd.setUTCDate(useEnd.getUTCDate() + nights);
+
+  const blockStart = subtractBusinessDaysSync(useStartDate, settings.PRE_USE_BUSINESS_DAYS, holidays);
+  const blockEnd = addBusinessDaysSync(useEnd, settings.POST_USE_BUSINESS_DAYS, holidays);
 
   return {
     useStart: useStartDate,

@@ -1,7 +1,11 @@
+import type { Metadata } from 'next';
 import AdminSidebar from '@/components/layout/AdminSidebar';
 
-export const metadata = {
-  title: 'PackTrail Admin',
+export const metadata: Metadata = {
+  title: {
+    default: 'PackTrail Admin',
+    template: '%s | PackTrail Admin',
+  },
 };
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

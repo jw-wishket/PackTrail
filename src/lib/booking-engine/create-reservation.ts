@@ -44,10 +44,9 @@ export class BlockConflictError extends Error {
 async function findAvailableSet(
   tx: Parameters<Parameters<typeof prisma.$transaction>[0]>[0],
   blockStart: string,
-  blockEnd: string
+  blockEnd: string,
+  productId: number
 ): Promise<{ id: number; name: string } | null> {
-  const totalSets = await getSystemSetting('TOTAL_SETS');
-
   // Find set IDs that are NOT blocked in the target range
   const blockedSets = await tx.$queryRaw<{ equipment_set_id: number }[]>`
     SELECT DISTINCT equipment_set_id
@@ -57,9 +56,9 @@ async function findAvailableSet(
 
   const blockedIds = new Set(blockedSets.map((r) => r.equipment_set_id));
 
-  // Find first available set (round-robin by lowest ID)
+  // Find first available set for this product (round-robin by lowest ID)
   const allSets = await tx.equipmentSet.findMany({
-    where: { status: 'AVAILABLE' },
+    where: { status: 'AVAILABLE', productId },
     orderBy: { id: 'asc' },
     select: { id: true, name: true },
   });
@@ -79,15 +78,15 @@ export async function createReservation(
   try {
     return await prisma.$transaction(
       async (tx) => {
-        // 1. Find available set
-        const availableSet = await findAvailableSet(tx, blockStartStr, blockEndStr);
+        // 1. Find available set for the product
+        const availableSet = await findAvailableSet(tx, blockStartStr, blockEndStr, input.productId);
         if (!availableSet) throw new SoldOutError();
 
         // 2. Advisory Lock on the first candidate
         await tx.$executeRaw`SELECT pg_advisory_xact_lock(${availableSet.id})`;
 
         // 3. Re-find available set (may have changed due to concurrent transactions)
-        const confirmedSet = await findAvailableSet(tx, blockStartStr, blockEndStr);
+        const confirmedSet = await findAvailableSet(tx, blockStartStr, blockEndStr, input.productId);
         if (!confirmedSet) throw new SoldOutError();
 
         // 4. Create reservation

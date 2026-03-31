@@ -56,17 +56,6 @@ const SETTING_GROUPS: SettingGroup[] = [
       },
     ],
   },
-  {
-    title: '재고',
-    fields: [
-      {
-        key: 'TOTAL_SETS',
-        label: '전체 장비 세트 수',
-        description: '운영 중인 전체 장비 세트 수량',
-        unit: '세트',
-      },
-    ],
-  },
 ];
 
 export default function AdminSettingsPage() {

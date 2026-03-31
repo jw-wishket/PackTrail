@@ -37,6 +37,8 @@ interface ConsumableOption {
 
 interface ProductDetailData {
   product: Product;
+  setCount: number;
+  availableSets: number;
   reviews: Review[];
   reviewCount: number;
   avgRating: number;
@@ -136,7 +138,7 @@ export default function ProductDetailPage() {
     );
   }
 
-  const { product, reviews, reviewCount, avgRating } = data;
+  const { product, setCount, availableSets, reviews, reviewCount, avgRating } = data;
   const emoji = productEmoji[product.name] ?? '🎒';
 
   /* ---------- tab content ---------- */
@@ -285,6 +287,12 @@ export default function ProductDetailPage() {
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-sage">2박 3일</span>
                     <span className="text-xl font-bold text-price-green">{formatPrice(product.price2night)}</span>
+                  </div>
+                  <div className="flex items-center justify-between pt-2 border-t border-beige">
+                    <span className="text-sm text-sage">잔여 세트</span>
+                    <span className={cn('text-sm font-bold', availableSets <= 1 ? 'text-destructive' : availableSets <= 2 ? 'text-warning' : 'text-price-green')}>
+                      {availableSets}/{setCount}세트
+                    </span>
                   </div>
                 </div>
 

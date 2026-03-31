@@ -10,6 +10,7 @@ type RentalType = 'ONE_NIGHT' | 'TWO_NIGHT';
 
 interface BookingCalendarProps {
   rentalType: RentalType;
+  productId: number;
   selectedDate: Date | null;
   onSelect: (date: Date) => void;
 }
@@ -19,7 +20,7 @@ interface AvailabilityData {
   availability: Record<string, { available: number; total: number }>;
 }
 
-export function BookingCalendar({ rentalType, selectedDate, onSelect }: BookingCalendarProps) {
+export function BookingCalendar({ rentalType, productId, selectedDate, onSelect }: BookingCalendarProps) {
   const [month, setMonth] = useState(new Date());
   const [data, setData] = useState<AvailabilityData | null>(null);
   const [loading, setLoading] = useState(false);
@@ -29,7 +30,7 @@ export function BookingCalendar({ rentalType, selectedDate, onSelect }: BookingC
     setLoading(true);
     try {
       const monthStr = format(d, 'yyyy-MM');
-      const res = await fetch(`/api/availability?month=${monthStr}&type=${rentalType}`);
+      const res = await fetch(`/api/availability?month=${monthStr}&type=${rentalType}&productId=${productId}`);
       if (res.ok) {
         setData(await res.json());
       }
@@ -38,7 +39,7 @@ export function BookingCalendar({ rentalType, selectedDate, onSelect }: BookingC
     } finally {
       setLoading(false);
     }
-  }, [rentalType]);
+  }, [rentalType, productId]);
 
   useEffect(() => {
     fetchAvailability(month);
@@ -51,11 +52,11 @@ export function BookingCalendar({ rentalType, selectedDate, onSelect }: BookingC
       return;
     }
     const dateStr = formatDateISO(selectedDate);
-    fetch(`/api/availability/${dateStr}/sets?type=${rentalType}`)
+    fetch(`/api/availability/${dateStr}/sets?type=${rentalType}&productId=${productId}`)
       .then((r) => r.json())
       .then((d) => setSelectedAvailable(d.available))
       .catch(() => setSelectedAvailable(null));
-  }, [selectedDate, rentalType]);
+  }, [selectedDate, rentalType, productId]);
 
   const today = startOfDay(new Date());
   const minBookable = data?.minBookableDate ? startOfDay(new Date(data.minBookableDate)) : null;

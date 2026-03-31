@@ -5,7 +5,6 @@ interface SystemSettings {
   POST_USE_BUSINESS_DAYS: number;
   MIN_ADVANCE_BUSINESS_DAYS: number;
   HOLD_DURATION_MINUTES: number;
-  TOTAL_SETS: number;
 }
 
 const DEFAULTS: SystemSettings = {
@@ -13,7 +12,6 @@ const DEFAULTS: SystemSettings = {
   POST_USE_BUSINESS_DAYS: 4,
   MIN_ADVANCE_BUSINESS_DAYS: 3,
   HOLD_DURATION_MINUTES: 10,
-  TOTAL_SETS: 10,
 };
 
 let cache: { data: SystemSettings; expiresAt: number } | null = null;

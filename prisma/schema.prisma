@@ -25,18 +25,19 @@ model User {
 }
 
 model Product {
-  id           Int           @id @default(autoincrement())
-  name         String        @db.VarChar(200)
+  id           Int            @id @default(autoincrement())
+  name         String         @db.VarChar(200)
   description  String?
-  capacity     Int           @default(1)
-  price1night  Int           @map("price_1night")
-  price2night  Int           @map("price_2night")
-  images       Json          @default("[]")
-  includes     Json          @default("[]")
-  isActive     Boolean       @default(true) @map("is_active")
-  sortOrder    Int           @default(0) @map("sort_order")
-  createdAt    DateTime      @default(now()) @map("created_at")
+  capacity     Int            @default(1)
+  price1night  Int            @map("price_1night")
+  price2night  Int            @map("price_2night")
+  images       Json           @default("[]")
+  includes     Json           @default("[]")
+  isActive     Boolean        @default(true) @map("is_active")
+  sortOrder    Int            @default(0) @map("sort_order")
+  createdAt    DateTime       @default(now()) @map("created_at")
   reservations Reservation[]
+  sets         EquipmentSet[]
 
   @@map("products")
 }
@@ -44,10 +45,12 @@ model Product {
 model EquipmentSet {
   id                   Int                @id @default(autoincrement())
   name                 String             @unique @db.VarChar(100)
+  productId            Int                @map("product_id")
   status               SetStatus          @default(AVAILABLE)
   currentReservationId String?            @unique @map("current_reservation_id") @db.Uuid
   notes                String?
   updatedAt            DateTime           @updatedAt @map("updated_at")
+  product              Product            @relation(fields: [productId], references: [id])
   currentReservation   Reservation?       @relation("CurrentReservation", fields: [currentReservationId], references: [id])
   blocks               ReservationBlock[]
   reservations         Reservation[]      @relation("SetReservations")

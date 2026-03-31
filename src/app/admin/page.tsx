@@ -26,6 +26,7 @@ interface DashboardData {
     id: number;
     name: string;
     status: string;
+    product?: { id: number; name: string };
     currentReservation?: {
       id: string;
       status: string;
@@ -198,9 +199,30 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Equipment set status grid */}
+      {/* Equipment set status grid - per product breakdown */}
       <div>
         <h2 className="text-sm font-semibold mb-3">장비 세트 현황</h2>
+        {/* Per-product summary */}
+        {(() => {
+          const byProduct = data.equipmentSets.reduce<Record<string, { total: number; available: number }>>((acc, s) => {
+            const name = s.product?.name ?? '미분류';
+            if (!acc[name]) acc[name] = { total: 0, available: 0 };
+            acc[name].total++;
+            if (s.status === 'AVAILABLE') acc[name].available++;
+            return acc;
+          }, {});
+          return (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
+              {Object.entries(byProduct).map(([name, counts]) => (
+                <div key={name} className="rounded-lg bg-admin-bg px-3 py-2">
+                  <span className="text-xs text-muted-foreground block truncate">{name}</span>
+                  <span className="text-sm font-bold">{counts.available}/{counts.total}</span>
+                  <span className="text-xs text-muted-foreground ml-1">가용</span>
+                </div>
+              ))}
+            </div>
+          );
+        })()}
         <SetStatusGrid sets={data.equipmentSets} />
       </div>
     </div>

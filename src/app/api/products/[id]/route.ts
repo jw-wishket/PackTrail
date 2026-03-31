@@ -14,6 +14,9 @@ export async function GET(
 
     const product = await prisma.product.findUnique({
       where: { id: productId, isActive: true },
+      include: {
+        sets: { select: { id: true, status: true } },
+      },
     });
 
     if (!product) {
@@ -51,8 +54,16 @@ export async function GET(
       orderBy: { sortOrder: 'asc' },
     });
 
+    const setCount = product.sets.length;
+    const availableSets = product.sets.filter((s) => s.status === 'AVAILABLE').length;
+
+    // Strip sets from the product object to keep response clean
+    const { sets, ...productData } = product;
+
     return NextResponse.json({
-      product,
+      product: productData,
+      setCount,
+      availableSets,
       reviews,
       reviewCount: reviews.length,
       avgRating: Math.round(avgRating * 10) / 10,

@@ -26,7 +26,7 @@ interface Product {
   includes: string[];
   sortOrder: number;
   isActive: boolean;
-  _count?: { reservations: number };
+  _count?: { reservations: number; sets: number };
 }
 
 interface Consumable {
@@ -297,10 +297,16 @@ export default function AdminProductsPage() {
                   </div>
                 )}
                 {p._count && (
-                  <div className="flex justify-between pt-1 border-t mt-1">
-                    <span className="text-muted-foreground">총 예약</span>
-                    <span>{p._count.reservations}건</span>
-                  </div>
+                  <>
+                    <div className="flex justify-between pt-1 border-t mt-1">
+                      <span className="text-muted-foreground">장비 세트</span>
+                      <span>{p._count.sets}세트</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">총 예약</span>
+                      <span>{p._count.reservations}건</span>
+                    </div>
+                  </>
                 )}
               </div>
             </div>

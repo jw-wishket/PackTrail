@@ -11,6 +11,7 @@ interface SetData {
   id: number;
   name: string;
   status: string;
+  product?: { id: number; name: string };
   currentReservation?: {
     id: string;
     status: string;
@@ -46,6 +47,14 @@ export default function AdminSetsPage() {
       </div>
     );
   }
+
+  // Group sets by product for display
+  const groupedSets = sets.reduce<Record<string, SetData[]>>((acc, s) => {
+    const productName = s.product?.name ?? '미분류';
+    if (!acc[productName]) acc[productName] = [];
+    acc[productName].push(s);
+    return acc;
+  }, {});
 
   return (
     <div className="space-y-4">
@@ -121,42 +130,49 @@ export default function AdminSetsPage() {
         <div>
           <SetStatusGrid sets={sets} />
 
-          {/* Extended detail for grid view */}
-          <div className="mt-4 space-y-3">
-            {sets
-              .filter((s) => s.currentReservation)
-              .map((s) => (
-                <div
-                  key={s.id}
-                  className="rounded-xl bg-white p-3 ring-1 ring-foreground/10"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">{s.name}</span>
-                    <span className="text-xs text-muted-foreground">
-                      {s.currentReservation?.status}
-                    </span>
-                  </div>
-                  {s.currentReservation?.user && (
-                    <p className="text-xs text-muted-foreground mt-1">
-                      {s.currentReservation.user.name ?? s.currentReservation.user.email}
-                      {s.currentReservation.product && ` - ${s.currentReservation.product.name}`}
-                    </p>
-                  )}
-                  {s.currentReservation && (
-                    <p className="text-xs text-muted-foreground">
-                      {new Date(s.currentReservation.useStartDate).toLocaleDateString('ko-KR', {
-                        month: 'short',
-                        day: 'numeric',
-                      })}{' '}
-                      ~{' '}
-                      {new Date(s.currentReservation.useEndDate).toLocaleDateString('ko-KR', {
-                        month: 'short',
-                        day: 'numeric',
-                      })}
-                    </p>
-                  )}
+          {/* Extended detail for grid view - grouped by product */}
+          <div className="mt-4 space-y-6">
+            {Object.entries(groupedSets).map(([productName, productSets]) => (
+              <div key={productName}>
+                <h3 className="text-sm font-semibold mb-2 text-moss">
+                  {productName} ({productSets.length}세트)
+                </h3>
+                <div className="space-y-2">
+                  {productSets.map((s) => (
+                    <div
+                      key={s.id}
+                      className="rounded-xl bg-white p-3 ring-1 ring-foreground/10"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium">{s.name}</span>
+                        <span className="text-xs text-muted-foreground">
+                          {s.currentReservation?.status ?? s.status}
+                        </span>
+                      </div>
+                      {s.currentReservation?.user && (
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {s.currentReservation.user.name ?? s.currentReservation.user.email}
+                          {s.currentReservation.product && ` - ${s.currentReservation.product.name}`}
+                        </p>
+                      )}
+                      {s.currentReservation && (
+                        <p className="text-xs text-muted-foreground">
+                          {new Date(s.currentReservation.useStartDate).toLocaleDateString('ko-KR', {
+                            month: 'short',
+                            day: 'numeric',
+                          })}{' '}
+                          ~{' '}
+                          {new Date(s.currentReservation.useEndDate).toLocaleDateString('ko-KR', {
+                            month: 'short',
+                            day: 'numeric',
+                          })}
+                        </p>
+                      )}
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
+            ))}
           </div>
         </div>
       )}

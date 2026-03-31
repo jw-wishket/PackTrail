@@ -44,6 +44,7 @@ export async function GET() {
         prisma.equipmentSet.findMany({
           orderBy: { id: 'asc' },
           include: {
+            product: { select: { id: true, name: true } },
             currentReservation: {
               select: { id: true, status: true, useStartDate: true, useEndDate: true },
             },

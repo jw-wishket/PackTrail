@@ -23,7 +23,7 @@ export async function GET() {
     const products = await prisma.product.findMany({
       orderBy: { sortOrder: 'asc' },
       include: {
-        _count: { select: { reservations: true } },
+        _count: { select: { reservations: true, sets: true } },
       },
     });
 

@@ -8,14 +8,8 @@ if (process.env.DIRECT_URL) {
 const prisma = new PrismaClient();
 
 async function main() {
-  // 1. Equipment Sets (10 sets)
-  for (let i = 1; i <= 10; i++) {
-    await prisma.equipmentSet.upsert({
-      where: { name: `SET-${String(i).padStart(2, '0')}` },
-      update: {},
-      create: { name: `SET-${String(i).padStart(2, '0')}` },
-    });
-  }
+  // 1. Equipment Sets (per-product assignment)
+  // Products must be created first (step 4), so sets are created after products below
 
   // 2. System Settings
   const settings = [
@@ -23,7 +17,6 @@ async function main() {
     { key: 'POST_USE_BUSINESS_DAYS', value: 4, description: '사용일 후 운영 영업일 수' },
     { key: 'MIN_ADVANCE_BUSINESS_DAYS', value: 3, description: '예약 가능 최소 선행 영업일' },
     { key: 'HOLD_DURATION_MINUTES', value: 10, description: '결제 홀딩 시간 (분)' },
-    { key: 'TOTAL_SETS', value: 10, description: '총 장비 세트 수' },
   ];
   for (const s of settings) {
     await prisma.systemSetting.upsert({
@@ -102,14 +95,39 @@ async function main() {
       sortOrder: 4,
     },
   ];
+  const productIds: Record<string, number> = {};
   for (const p of products) {
     const existing = await prisma.product.findFirst({ where: { name: p.name } });
     if (!existing) {
-      await prisma.product.create({ data: p });
+      const created = await prisma.product.create({ data: p });
+      productIds[p.name] = created.id;
+    } else {
+      productIds[p.name] = existing.id;
     }
   }
 
-  // 5. Sample Consumable Options
+  // 5. Equipment Sets (per-product)
+  const setAssignments = [
+    { name: 'SET-B01', productName: '베이직 솔로 세트' },
+    { name: 'SET-B02', productName: '베이직 솔로 세트' },
+    { name: 'SET-B03', productName: '베이직 솔로 세트' },
+    { name: 'SET-P01', productName: '프리미엄 듀오 세트' },
+    { name: 'SET-P02', productName: '프리미엄 듀오 세트' },
+    { name: 'SET-P03', productName: '프리미엄 듀오 세트' },
+    { name: 'SET-F01', productName: '풀패키지 세트' },
+    { name: 'SET-F02', productName: '풀패키지 세트' },
+    { name: 'SET-F03', productName: '풀패키지 세트' },
+    { name: 'SET-L01', productName: '라이트 솔로 세트' },
+  ];
+  for (const s of setAssignments) {
+    await prisma.equipmentSet.upsert({
+      where: { name: s.name },
+      update: { productId: productIds[s.productName] },
+      create: { name: s.name, productId: productIds[s.productName] },
+    });
+  }
+
+  // 6. Sample Consumable Options
   const consumables = [
     { name: '참나무 장작 1단', description: '화로대용 · 약 3시간 연소', price: 8000, sortOrder: 1 },
     { name: '숯 3kg', description: '바비큐용 · 착화탄 포함', price: 6000, sortOrder: 2 },

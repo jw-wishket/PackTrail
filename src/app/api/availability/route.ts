@@ -9,10 +9,11 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const monthParam = searchParams.get('month'); // YYYY-MM
     const typeParam = searchParams.get('type'); // ONE_NIGHT or TWO_NIGHT
+    const productIdParam = searchParams.get('productId');
 
-    if (!monthParam || !typeParam) {
+    if (!monthParam || !typeParam || !productIdParam) {
       return NextResponse.json(
-        { error: 'month and type parameters are required' },
+        { error: 'month, type, and productId parameters are required' },
         { status: 400 }
       );
     }
@@ -20,6 +21,14 @@ export async function GET(request: NextRequest) {
     if (typeParam !== 'ONE_NIGHT' && typeParam !== 'TWO_NIGHT') {
       return NextResponse.json(
         { error: 'type must be ONE_NIGHT or TWO_NIGHT' },
+        { status: 400 }
+      );
+    }
+
+    const productId = parseInt(productIdParam, 10);
+    if (isNaN(productId)) {
+      return NextResponse.json(
+        { error: 'Invalid productId' },
         { status: 400 }
       );
     }
@@ -39,7 +48,7 @@ export async function GET(request: NextRequest) {
     const minAdvanceDays = await getSystemSetting('MIN_ADVANCE_BUSINESS_DAYS');
     const minBookableDate = await addBusinessDays(new Date(), minAdvanceDays);
 
-    const availability = await getMonthlyAvailability(year, month, typeParam);
+    const availability = await getMonthlyAvailability(year, month, typeParam, productId);
 
     // Convert Map to object for JSON
     const availabilityObj: Record<string, { available: number; total: number }> = {};
@@ -50,6 +59,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       month: monthParam,
       rentalType: typeParam,
+      productId,
       minBookableDate: formatDateISO(minBookableDate),
       availability: availabilityObj,
     });

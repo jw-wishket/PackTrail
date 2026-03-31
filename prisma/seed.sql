@@ -1,24 +1,9 @@
--- Seed: Equipment Sets (10 sets)
-INSERT INTO equipment_sets (name, status, updated_at) VALUES
-  ('SET-01', 'AVAILABLE', NOW()),
-  ('SET-02', 'AVAILABLE', NOW()),
-  ('SET-03', 'AVAILABLE', NOW()),
-  ('SET-04', 'AVAILABLE', NOW()),
-  ('SET-05', 'AVAILABLE', NOW()),
-  ('SET-06', 'AVAILABLE', NOW()),
-  ('SET-07', 'AVAILABLE', NOW()),
-  ('SET-08', 'AVAILABLE', NOW()),
-  ('SET-09', 'AVAILABLE', NOW()),
-  ('SET-10', 'AVAILABLE', NOW())
-ON CONFLICT (name) DO NOTHING;
-
 -- Seed: System Settings
 INSERT INTO system_settings (key, value, description, updated_at) VALUES
   ('PRE_USE_BUSINESS_DAYS', '3', '사용일 전 운영 영업일 수', NOW()),
   ('POST_USE_BUSINESS_DAYS', '4', '사용일 후 운영 영업일 수', NOW()),
   ('MIN_ADVANCE_BUSINESS_DAYS', '3', '예약 가능 최소 선행 영업일', NOW()),
-  ('HOLD_DURATION_MINUTES', '10', '결제 홀딩 시간 (분)', NOW()),
-  ('TOTAL_SETS', '10', '총 장비 세트 수', NOW())
+  ('HOLD_DURATION_MINUTES', '10', '결제 홀딩 시간 (분)', NOW())
 ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, description = EXCLUDED.description, updated_at = NOW();
 
 -- Seed: 2026 Korean Holidays
@@ -47,6 +32,20 @@ INSERT INTO products (name, description, capacity, price_1night, price_2night, i
   ('풀패키지 세트', '화로대·조리도구까지 올인원 패키지', 2, 119000, 149000, '[]', '["2인용 텐트","침낭 x2","에어매트 x2","화로대","조리세트","접이식 테이블","체어 x2","LED 랜턴","타프","수납 가방"]', true, 3, NOW()),
   ('라이트 솔로 세트', '가볍게 떠나는 미니멀 백패킹', 1, 39000, 55000, '[]', '["경량 텐트","침낭","에어매트"]', true, 4, NOW())
 ON CONFLICT DO NOTHING;
+
+-- Seed: Equipment Sets (per-product)
+INSERT INTO equipment_sets (name, product_id, status, updated_at) VALUES
+  ('SET-B01', (SELECT id FROM products WHERE name = '베이직 솔로 세트'), 'AVAILABLE', NOW()),
+  ('SET-B02', (SELECT id FROM products WHERE name = '베이직 솔로 세트'), 'AVAILABLE', NOW()),
+  ('SET-B03', (SELECT id FROM products WHERE name = '베이직 솔로 세트'), 'AVAILABLE', NOW()),
+  ('SET-P01', (SELECT id FROM products WHERE name = '프리미엄 듀오 세트'), 'AVAILABLE', NOW()),
+  ('SET-P02', (SELECT id FROM products WHERE name = '프리미엄 듀오 세트'), 'AVAILABLE', NOW()),
+  ('SET-P03', (SELECT id FROM products WHERE name = '프리미엄 듀오 세트'), 'AVAILABLE', NOW()),
+  ('SET-F01', (SELECT id FROM products WHERE name = '풀패키지 세트'), 'AVAILABLE', NOW()),
+  ('SET-F02', (SELECT id FROM products WHERE name = '풀패키지 세트'), 'AVAILABLE', NOW()),
+  ('SET-F03', (SELECT id FROM products WHERE name = '풀패키지 세트'), 'AVAILABLE', NOW()),
+  ('SET-L01', (SELECT id FROM products WHERE name = '라이트 솔로 세트'), 'AVAILABLE', NOW())
+ON CONFLICT (name) DO NOTHING;
 
 -- Seed: Consumable Options
 INSERT INTO consumable_options (name, description, price, is_active, sort_order) VALUES

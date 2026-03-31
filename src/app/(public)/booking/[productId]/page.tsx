@@ -180,9 +180,10 @@ export default function BookingPage() {
         onSelect={(t) => { setRentalType(t); setSelectedDate(null); }}
       />
     ),
-    2: rentalType ? (
+    2: rentalType && data?.product ? (
       <BookingCalendar
         rentalType={rentalType}
+        productId={data.product.id}
         selectedDate={selectedDate}
         onSelect={setSelectedDate}
       />

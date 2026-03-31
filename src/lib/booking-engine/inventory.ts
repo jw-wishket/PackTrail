@@ -24,7 +24,7 @@ export async function getAvailableSetCount(
   const result = await prisma.$queryRaw<{ count: bigint }[]>`
     SELECT COUNT(DISTINCT equipment_set_id) as count
     FROM reservation_blocks
-    WHERE equipment_set_id = ANY(${setIds})
+    WHERE equipment_set_id IN (SELECT id FROM equipment_sets WHERE product_id = ${productId})
       AND block_range && daterange(
         ${formatDateISO(block.blockStart)}::date,
         ${formatDateISO(block.blockEnd)}::date,
@@ -78,7 +78,7 @@ export async function getMonthlyAvailability(
       lower(block_range)::text as block_start,
       upper(block_range)::text as block_end
     FROM reservation_blocks
-    WHERE equipment_set_id = ANY(${setIds})
+    WHERE equipment_set_id IN (SELECT id FROM equipment_sets WHERE product_id = ${productId})
       AND block_range && daterange(
         ${formatDateISO(windowStart)}::date,
         ${formatDateISO(windowEnd)}::date,

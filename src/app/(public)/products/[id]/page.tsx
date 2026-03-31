@@ -140,6 +140,8 @@ export default function ProductDetailPage() {
 
   const { product, setCount, availableSets, reviews, reviewCount, avgRating } = data;
   const emoji = productEmoji[product.name] ?? '🎒';
+  const productImages = Array.isArray(product.images) ? (product.images as string[]) : [];
+  const hasImages = productImages.length > 0;
 
   /* ---------- tab content ---------- */
   const tabContent: Record<Tab, React.ReactNode> = {
@@ -219,7 +221,15 @@ export default function ProductDetailPage() {
             <div>
               {/* Main image */}
               <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#4A6B4A] to-[#5E7F5E] flex items-center justify-center h-72 sm:h-80 lg:h-96">
-                <span className="text-8xl sm:text-9xl">{emoji}</span>
+                {hasImages ? (
+                  <img
+                    src={productImages[0]}
+                    alt={product.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span className="text-8xl sm:text-9xl">{emoji}</span>
+                )}
                 <span className="absolute top-4 left-4 text-xs bg-white/90 text-moss px-2.5 py-1 rounded-full font-semibold">
                   {product.capacity}인용
                 </span>
@@ -227,17 +237,31 @@ export default function ProductDetailPage() {
 
               {/* Thumbnails */}
               <div className="mt-3 flex gap-2">
-                {[emoji, emoji, emoji].map((e, i) => (
-                  <button
-                    key={i}
-                    className={cn(
-                      'h-16 w-16 rounded-xl overflow-hidden bg-gradient-to-br from-[#4A6B4A]/60 to-[#5E7F5E]/60 flex items-center justify-center text-2xl border-2 transition-colors',
-                      i === 0 ? 'border-olive' : 'border-transparent hover:border-sage'
-                    )}
-                  >
-                    {e}
-                  </button>
-                ))}
+                {hasImages ? (
+                  productImages.map((img, i) => (
+                    <button
+                      key={i}
+                      className={cn(
+                        'h-16 w-16 rounded-xl overflow-hidden border-2 transition-colors',
+                        i === 0 ? 'border-olive' : 'border-transparent hover:border-sage'
+                      )}
+                    >
+                      <img src={img} alt={`${product.name} ${i + 1}`} className="w-full h-full object-cover" />
+                    </button>
+                  ))
+                ) : (
+                  [emoji, emoji, emoji].map((e, i) => (
+                    <button
+                      key={i}
+                      className={cn(
+                        'h-16 w-16 rounded-xl overflow-hidden bg-gradient-to-br from-[#4A6B4A]/60 to-[#5E7F5E]/60 flex items-center justify-center text-2xl border-2 transition-colors',
+                        i === 0 ? 'border-olive' : 'border-transparent hover:border-sage'
+                      )}
+                    >
+                      {e}
+                    </button>
+                  ))
+                )}
               </div>
 
               {/* Tabs (desktop: below gallery) */}

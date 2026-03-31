@@ -9,6 +9,7 @@ interface Props {
     capacity: number;
     price1night: number;
     price2night: number;
+    images?: unknown;
     includes: string[];
   };
 }
@@ -29,7 +30,15 @@ export function ProductCard({ product }: Props) {
     <div className="bg-white rounded-xl overflow-hidden shadow-sm border border-beige">
       {/* Image area */}
       <div className="h-44 sm:h-48 bg-gradient-to-br from-[#4A6B4A] to-[#5E7F5E] flex items-center justify-center relative">
-        <span className="text-6xl">{emoji}</span>
+        {Array.isArray(product.images) && (product.images as string[]).length > 0 ? (
+          <img
+            src={(product.images as string[])[0]}
+            alt={product.name}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <span className="text-6xl">{emoji}</span>
+        )}
         <span className="absolute top-3 left-3 text-xs bg-white/90 text-moss px-2 py-0.5 rounded font-semibold">
           {product.capacity}인용
         </span>

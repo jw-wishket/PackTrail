@@ -13,7 +13,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
-import { Loader2, Plus, Pencil, XCircle } from 'lucide-react';
+import { Loader2, Plus, Pencil, XCircle, Upload, X } from 'lucide-react';
 
 interface Product {
   id: number;
@@ -44,6 +44,7 @@ const emptyProduct = {
   capacity: 1,
   price1night: 0,
   price2night: 0,
+  images: [] as string[],
   includes: '',
   sortOrder: 0,
   isActive: true,
@@ -67,6 +68,8 @@ export default function AdminProductsPage() {
   const [editingProduct, setEditingProduct] = useState<number | null>(null);
   const [productForm, setProductForm] = useState(emptyProduct);
   const [saving, setSaving] = useState(false);
+
+  const [uploading, setUploading] = useState(false);
 
   // Consumable dialog
   const [consumableOpen, setConsumableOpen] = useState(false);
@@ -94,6 +97,7 @@ export default function AdminProductsPage() {
       capacity: product.capacity,
       price1night: product.price1night,
       price2night: product.price2night,
+      images: product.images ?? [],
       includes: product.includes.join(', '),
       sortOrder: product.sortOrder,
       isActive: product.isActive,
@@ -116,6 +120,7 @@ export default function AdminProductsPage() {
         capacity: Number(productForm.capacity),
         price1night: Number(productForm.price1night),
         price2night: Number(productForm.price2night),
+        images: productForm.images,
         includes: productForm.includes
           .split(',')
           .map((s) => s.trim())
@@ -161,6 +166,30 @@ export default function AdminProductsPage() {
     } catch (err) {
       console.error(err);
     }
+  }
+
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await fetch('/api/admin/upload', { method: 'POST', body: formData });
+      if (res.ok) {
+        const { url } = await res.json();
+        setProductForm((f) => ({ ...f, images: [...f.images, url] }));
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setUploading(false);
+      e.target.value = '';
+    }
+  }
+
+  function removeImage(index: number) {
+    setProductForm((f) => ({ ...f, images: f.images.filter((_, i) => i !== index) }));
   }
 
   function openConsumableEdit(c: Consumable) {
@@ -444,6 +473,37 @@ export default function AdminProductsPage() {
                     setProductForm((f) => ({ ...f, price2night: Number(e.target.value) }))
                   }
                 />
+              </div>
+            </div>
+            <div>
+              <Label>상품 이미지</Label>
+              <div className="flex flex-wrap gap-2 mt-1">
+                {productForm.images.map((url, i) => (
+                  <div key={i} className="relative w-16 h-16 rounded-lg overflow-hidden border">
+                    <img src={url} alt={`상품 이미지 ${i + 1}`} className="w-full h-full object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => removeImage(i)}
+                      className="absolute top-0 right-0 bg-black/50 rounded-bl p-0.5"
+                    >
+                      <X className="size-3 text-white" />
+                    </button>
+                  </div>
+                ))}
+                <label className="flex items-center justify-center w-16 h-16 rounded-lg border-2 border-dashed border-muted-foreground/30 cursor-pointer hover:border-muted-foreground/50 transition-colors">
+                  {uploading ? (
+                    <Loader2 className="size-4 animate-spin text-muted-foreground" />
+                  ) : (
+                    <Upload className="size-4 text-muted-foreground" />
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleImageUpload}
+                    disabled={uploading}
+                  />
+                </label>
               </div>
             </div>
             <div>

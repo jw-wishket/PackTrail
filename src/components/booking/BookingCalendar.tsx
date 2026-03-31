@@ -121,8 +121,8 @@ export function BookingCalendar({ rentalType, productId, selectedDate, onSelect 
               day_button: 'w-10 h-10 sm:w-12 sm:h-12 rounded-lg text-sm sm:text-base font-medium text-moss hover:bg-olive/10 transition-colors flex items-center justify-center mx-auto',
               today: 'font-bold text-olive ring-2 ring-olive/30 rounded-lg',
               selected: 'bg-olive text-white rounded-lg font-bold hover:bg-olive/90',
-              disabled: 'text-gray-300 line-through hover:bg-transparent cursor-not-allowed',
-              outside: 'text-gray-200',
+              disabled: 'opacity-25 line-through decoration-2 hover:bg-transparent cursor-not-allowed pointer-events-none',
+              outside: 'opacity-15',
             }}
           />
 
@@ -137,7 +137,7 @@ export function BookingCalendar({ rentalType, productId, selectedDate, onSelect 
               <span className="text-xs text-sage">종료일</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="w-3 h-3 rounded-sm bg-gray-200" />
+              <span className="w-3 h-3 rounded-sm bg-moss/25 relative"><span className="absolute inset-0 flex items-center justify-center text-[6px] text-moss/50">—</span></span>
               <span className="text-xs text-sage">예약 불가</span>
             </div>
           </div>

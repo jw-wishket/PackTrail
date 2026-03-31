@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { DayPicker } from 'react-day-picker';
 import { ko } from 'date-fns/locale';
 import { addDays, format, isBefore, startOfDay } from 'date-fns';
@@ -24,7 +24,6 @@ export function BookingCalendar({ rentalType, productId, selectedDate, onSelect 
   const [month, setMonth] = useState(new Date());
   const [data, setData] = useState<AvailabilityData | null>(null);
   const [loading, setLoading] = useState(false);
-  const [selectedAvailable, setSelectedAvailable] = useState<number | null>(null);
 
   const fetchAvailability = useCallback(async (d: Date) => {
     setLoading(true);
@@ -45,18 +44,13 @@ export function BookingCalendar({ rentalType, productId, selectedDate, onSelect 
     fetchAvailability(month);
   }, [month, fetchAvailability]);
 
-  // When a date is selected, fetch its set count
-  useEffect(() => {
-    if (!selectedDate) {
-      setSelectedAvailable(null);
-      return;
-    }
+  // Derive per-date availability from cached monthly data
+  const selectedAvailable = useMemo(() => {
+    if (!selectedDate || !data?.availability) return null;
     const dateStr = formatDateISO(selectedDate);
-    fetch(`/api/availability/${dateStr}/sets?type=${rentalType}&productId=${productId}`)
-      .then((r) => r.json())
-      .then((d) => setSelectedAvailable(d.available))
-      .catch(() => setSelectedAvailable(null));
-  }, [selectedDate, rentalType, productId]);
+    const dayData = data.availability[dateStr];
+    return dayData?.available ?? null;
+  }, [selectedDate, data]);
 
   const today = startOfDay(new Date());
   const minBookable = data?.minBookableDate ? startOfDay(new Date(data.minBookableDate)) : null;

@@ -25,20 +25,34 @@ export function BookingCalendar({ rentalType, productId, selectedDate, onSelect 
   const [data, setData] = useState<AvailabilityData | null>(null);
   const [loading, setLoading] = useState(false);
 
+  const [initialMonthSet, setInitialMonthSet] = useState(false);
+
   const fetchAvailability = useCallback(async (d: Date) => {
     setLoading(true);
     try {
       const monthStr = format(d, 'yyyy-MM');
       const res = await fetch(`/api/availability?month=${monthStr}&type=${rentalType}&productId=${productId}`);
       if (res.ok) {
-        setData(await res.json());
+        const json = await res.json();
+        setData(json);
+
+        // 첫 로드 시 minBookableDate의 월로 캘린더 이동
+        if (!initialMonthSet && json.minBookableDate) {
+          const minDate = new Date(json.minBookableDate);
+          const currentMonth = d.getMonth();
+          const minMonth = minDate.getMonth();
+          if (minMonth !== currentMonth || minDate.getFullYear() !== d.getFullYear()) {
+            setMonth(startOfDay(minDate));
+          }
+          setInitialMonthSet(true);
+        }
       }
     } catch {
       // ignore
     } finally {
       setLoading(false);
     }
-  }, [rentalType, productId]);
+  }, [rentalType, productId, initialMonthSet]);
 
   useEffect(() => {
     fetchAvailability(month);

@@ -26,19 +26,19 @@ const SETTING_GROUPS: SettingGroup[] = [
     title: '예약 엔진',
     fields: [
       {
-        key: 'PRE_USE_DAYS',
+        key: 'PRE_USE_BUSINESS_DAYS',
         label: '사전 준비일',
         description: '이용 시작 전 장비 준비에 필요한 영업일 수',
         unit: '일',
       },
       {
-        key: 'POST_USE_DAYS',
+        key: 'POST_USE_BUSINESS_DAYS',
         label: '사후 정비일',
         description: '이용 종료 후 장비 정비에 필요한 영업일 수',
         unit: '일',
       },
       {
-        key: 'MIN_ADVANCE_DAYS',
+        key: 'MIN_ADVANCE_BUSINESS_DAYS',
         label: '최소 예약 선행일',
         description: '예약 가능한 최소 영업일 수 (오늘 기준)',
         unit: '일',
@@ -71,7 +71,7 @@ export default function AdminSettingsPage() {
       .then((data) => {
         const map: Record<string, number> = {};
         for (const s of data.settings ?? []) {
-          map[s.key] = s.value;
+          map[s.key] = typeof s.value === 'number' ? s.value : Number(s.value);
         }
         setSettings(map);
         setOriginal(map);
@@ -105,7 +105,7 @@ export default function AdminSettingsPage() {
         const data = await res.json();
         const map: Record<string, number> = {};
         for (const s of data.settings ?? []) {
-          map[s.key] = s.value;
+          map[s.key] = typeof s.value === 'number' ? s.value : Number(s.value);
         }
         setSettings(map);
         setOriginal(map);

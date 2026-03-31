@@ -47,18 +47,19 @@ async function findAvailableSet(
   blockEnd: string,
   productId: number
 ): Promise<{ id: number; name: string } | null> {
-  // Find set IDs that are NOT blocked in the target range
+  // Find set IDs that are NOT blocked in the target range (scoped to this product)
   const blockedSets = await tx.$queryRaw<{ equipment_set_id: number }[]>`
     SELECT DISTINCT equipment_set_id
     FROM reservation_blocks
     WHERE block_range && daterange(${blockStart}::date, ${blockEnd}::date, '[]')
+    AND equipment_set_id IN (SELECT id FROM equipment_sets WHERE product_id = ${productId})
   `;
 
   const blockedIds = new Set(blockedSets.map((r) => r.equipment_set_id));
 
   // Find first available set for this product (round-robin by lowest ID)
   const allSets = await tx.equipmentSet.findMany({
-    where: { status: 'AVAILABLE', productId },
+    where: { productId, status: { not: 'MAINTENANCE' } },
     orderBy: { id: 'asc' },
     select: { id: true, name: true },
   });

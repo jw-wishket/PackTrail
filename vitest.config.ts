@@ -6,5 +6,6 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
+    exclude: ['e2e/**', 'node_modules/**'],
   },
 });

@@ -1,0 +1,888 @@
+{
+  "issues": [
+    {
+      "page": "/",
+      "description": "\"이용 방법 보기\" button not found",
+      "screenshot": "01-howto-missing"
+    }
+  ],
+  "testedElements": [
+    {
+      "page": "/",
+      "element": "Hero headline \"백패킹을 시작하세요\"",
+      "result": "PASS"
+    },
+    {
+      "page": "/",
+      "element": "Button: 세트 둘러보기",
+      "result": "PASS - navigated"
+    },
+    {
+      "page": "/",
+      "element": "Button: 이용 방법 보기",
+      "result": "NOT FOUND"
+    },
+    {
+      "page": "/",
+      "element": "Section: PackTrail intro",
+      "result": "PASS"
+    },
+    {
+      "page": "/",
+      "element": "Section: 이용 방법",
+      "result": "PASS"
+    },
+    {
+      "page": "/",
+      "element": "Section: 인기 세트",
+      "result": "WARN"
+    },
+    {
+      "page": "/",
+      "element": "Section: 이용 후기",
+      "result": "WARN"
+    },
+    {
+      "page": "/",
+      "element": "\"예약하기\" links in 인기 세트 (count: 5)",
+      "result": "PASS"
+    },
+    {
+      "page": "/",
+      "element": "Footer CTA section",
+      "result": "WARN"
+    },
+    {
+      "page": "/",
+      "element": "Navbar link: 장비 소개",
+      "result": "PASS"
+    },
+    {
+      "page": "/",
+      "element": "Navbar link: 이용 방법",
+      "result": "PASS"
+    },
+    {
+      "page": "/",
+      "element": "Navbar link: 후기",
+      "result": "PASS"
+    },
+    {
+      "page": "/",
+      "element": "Broken images check (0 broken)",
+      "result": "PASS"
+    },
+    {
+      "page": "/products",
+      "element": "Page title \"장비 세트\"",
+      "result": "PASS"
+    },
+    {
+      "page": "/products",
+      "element": "Product: 베이직 솔로 세트",
+      "result": "PASS"
+    },
+    {
+      "page": "/products",
+      "element": "Product: 프리미엄 듀오 세트",
+      "result": "PASS"
+    },
+    {
+      "page": "/products",
+      "element": "Product: 풀패키지 세트",
+      "result": "PASS"
+    },
+    {
+      "page": "/products",
+      "element": "Product: 라이트 솔로 세트",
+      "result": "PASS"
+    },
+    {
+      "page": "/products",
+      "element": "Filter: 전체 (visible products: 0)",
+      "result": "PASS"
+    },
+    {
+      "page": "/products",
+      "element": "Filter: 1인용 (visible products: 0)",
+      "result": "PASS"
+    },
+    {
+      "page": "/products",
+      "element": "Filter: 2인용 (visible products: 0)",
+      "result": "PASS"
+    },
+    {
+      "page": "/products",
+      "element": "Broken images check (0 broken)",
+      "result": "PASS"
+    },
+    {
+      "page": "/products/1",
+      "element": "Product name",
+      "result": "PASS"
+    },
+    {
+      "page": "/products/1",
+      "element": "Product images (count: 0)",
+      "result": "FAIL"
+    },
+    {
+      "page": "/products/1",
+      "element": "Price display",
+      "result": "PASS"
+    },
+    {
+      "page": "/products/1",
+      "element": "Tab: 포함 장비",
+      "result": "PASS - clicked"
+    },
+    {
+      "page": "/products/1",
+      "element": "Tab: 이용 안내",
+      "result": "PASS - clicked"
+    },
+    {
+      "page": "/products/1",
+      "element": "Tab: 후기",
+      "result": "PASS - clicked"
+    },
+    {
+      "page": "/products/1",
+      "element": "Button: 예약하기",
+      "result": "PASS"
+    },
+    {
+      "page": "/products/1",
+      "element": "Image thumbnails (count: 0)",
+      "result": "INFO"
+    },
+    {
+      "page": "/products/1",
+      "element": "Equipment items visible",
+      "result": "INFO"
+    },
+    {
+      "page": "/products/1",
+      "element": "Broken images check (0 broken)",
+      "result": "PASS"
+    },
+    {
+      "page": "/auth/login",
+      "element": "Title \"로그인\"",
+      "result": "PASS"
+    },
+    {
+      "page": "/auth/login",
+      "element": "Email input",
+      "result": "PASS"
+    },
+    {
+      "page": "/auth/login",
+      "element": "Password input",
+      "result": "PASS"
+    },
+    {
+      "page": "/auth/login",
+      "element": "Login button",
+      "result": "PASS"
+    },
+    {
+      "page": "/auth/login",
+      "element": "Kakao button \"카카오로 시작하기\"",
+      "result": "PASS"
+    },
+    {
+      "page": "/auth/login",
+      "element": "Link: 회원가입",
+      "result": "PASS"
+    },
+    {
+      "page": "/auth/login",
+      "element": "Separator \"또는\"",
+      "result": "PASS"
+    },
+    {
+      "page": "/auth/signup",
+      "element": "Title \"회원가입\"",
+      "result": "PASS"
+    },
+    {
+      "page": "/auth/signup",
+      "element": "Label: 이름",
+      "result": "PASS"
+    },
+    {
+      "page": "/auth/signup",
+      "element": "Label: 이메일",
+      "result": "PASS"
+    },
+    {
+      "page": "/auth/signup",
+      "element": "Label: 비밀번호",
+      "result": "PASS"
+    },
+    {
+      "page": "/auth/signup",
+      "element": "Form inputs (count: 3)",
+      "result": "PASS"
+    },
+    {
+      "page": "/auth/signup",
+      "element": "Button: 가입하기",
+      "result": "PASS"
+    },
+    {
+      "page": "/auth/signup",
+      "element": "Link: 로그인",
+      "result": "PASS"
+    },
+    {
+      "page": "/auth/login",
+      "element": "User login",
+      "result": "PASS - redirected to http://localhost:3000/"
+    },
+    {
+      "page": "/ (user)",
+      "element": "Navbar: 마이페이지",
+      "result": "PASS"
+    },
+    {
+      "page": "/ (user)",
+      "element": "Navbar: 관리자 (should NOT exist)",
+      "result": "PASS - hidden"
+    },
+    {
+      "page": "/booking/1",
+      "element": "Heading: 렌탈 타입 선택",
+      "result": "PASS"
+    },
+    {
+      "page": "/booking/1",
+      "element": "Select: 1박 2일",
+      "result": "PASS - clicked"
+    },
+    {
+      "page": "/booking/1",
+      "element": "Button: 다음 단계",
+      "result": "PASS"
+    },
+    {
+      "page": "/booking/1",
+      "element": "Button: 다음 단계 state",
+      "result": "PASS - enabled"
+    },
+    {
+      "page": "/booking (step2)",
+      "element": "Date selection step visible",
+      "result": "WARN - may not have navigated"
+    },
+    {
+      "page": "/booking (step2)",
+      "element": "Calendar visible",
+      "result": "PASS"
+    },
+    {
+      "page": "/booking (step2)",
+      "element": "Available day buttons: 0",
+      "result": "INFO"
+    },
+    {
+      "page": "/booking (step3)",
+      "element": "Options step visible",
+      "result": "WARN - may not have reached step 3"
+    },
+    {
+      "page": "/booking (step4)",
+      "element": "Payment/summary step",
+      "result": "WARN - may not have reached step 4"
+    },
+    {
+      "page": "/my",
+      "element": "Page title \"마이페이지\"",
+      "result": "PASS"
+    },
+    {
+      "page": "/my",
+      "element": "Filter tab: 전체",
+      "result": "PASS"
+    },
+    {
+      "page": "/my",
+      "element": "Filter tab: 진행중",
+      "result": "PASS"
+    },
+    {
+      "page": "/my",
+      "element": "Filter tab: 완료",
+      "result": "PASS"
+    },
+    {
+      "page": "/my",
+      "element": "Filter tab: 취소",
+      "result": "PASS"
+    },
+    {
+      "page": "/my",
+      "element": "Empty state: \"예약 내역이 없습니다\"",
+      "result": "PASS - empty state shown"
+    },
+    {
+      "page": "/admin (as user)",
+      "element": "Auth guard",
+      "result": "PASS - redirected"
+    },
+    {
+      "page": "/auth/login (admin)",
+      "element": "Admin login",
+      "result": "PASS - redirected to http://localhost:3000/"
+    },
+    {
+      "page": "/ (admin)",
+      "element": "Navbar: 관리자 link",
+      "result": "PASS"
+    },
+    {
+      "page": "/ (admin)",
+      "element": "Admin user indicator in navbar",
+      "result": "NOT FOUND"
+    },
+    {
+      "page": "/admin",
+      "element": "Title: 대시보드",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin",
+      "element": "Stat card: 오늘 예약",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin",
+      "element": "Stat card: 이달 매출",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin",
+      "element": "Stat card: 홀딩 대기",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin",
+      "element": "Stat card: 장비 세트",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin",
+      "element": "Set count: 10/10",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin",
+      "element": "Section: 오늘의 업무",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin",
+      "element": "Task: 출고 예정",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin",
+      "element": "Task: 회수 예정",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin",
+      "element": "Task: 정비 필요",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin",
+      "element": "Section: 최근 예약",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin",
+      "element": "Section: 장비 세트 현황",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin",
+      "element": "Set: SET-01",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin",
+      "element": "Set: SET-02",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin",
+      "element": "Set: SET-03",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin",
+      "element": "Set: SET-04",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin",
+      "element": "Set: SET-05",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin",
+      "element": "Set: SET-06",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin",
+      "element": "Set: SET-07",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin",
+      "element": "Set: SET-08",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin",
+      "element": "Set: SET-09",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin",
+      "element": "Set: SET-10",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin",
+      "element": "Sidebar: 대시보드",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin",
+      "element": "Sidebar: 예약관리",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin",
+      "element": "Sidebar: 세트관리",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin",
+      "element": "Sidebar: 상품관리",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin",
+      "element": "Sidebar: 공휴일관리",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin",
+      "element": "Sidebar: 설정",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/reservations",
+      "element": "Title: 예약 관리",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/reservations",
+      "element": "Search input",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/reservations",
+      "element": "Search button \"검색\"",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/reservations",
+      "element": "Filter: 전체",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/reservations",
+      "element": "Filter: 홀딩",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/reservations",
+      "element": "Filter: 확정",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/reservations",
+      "element": "Filter: 배송중",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/reservations",
+      "element": "Filter: 사용중",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/reservations",
+      "element": "Filter: 반납중",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/reservations",
+      "element": "Filter: 완료",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/reservations",
+      "element": "Filter: 취소",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/reservations",
+      "element": "Table header: 상태",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/reservations",
+      "element": "Table header: 고객",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/reservations",
+      "element": "Table header: 상품",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/reservations",
+      "element": "Table header: 이용기간",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/reservations",
+      "element": "Table header: 금액",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/reservations",
+      "element": "Table header: 생성일",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/reservations",
+      "element": "Table element",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/reservations",
+      "element": "Click filter: 홀딩",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/reservations",
+      "element": "Click filter: 확정",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/reservations",
+      "element": "Click filter: 취소",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/reservations",
+      "element": "Click filter: 전체",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/sets",
+      "element": "Title: 세트 관리",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/sets",
+      "element": "Toggle: 타임라인",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/sets",
+      "element": "Toggle: 카드",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/sets",
+      "element": "Switch to card view",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/sets",
+      "element": "Switch to timeline view",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/sets",
+      "element": "Button: 이번 주",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/sets",
+      "element": "Sets in timeline (10/10)",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/products",
+      "element": "Title: 상품 관리",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/products",
+      "element": "Product: 베이직 솔로 세트",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/products",
+      "element": "Product: 프리미엄 듀오 세트",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/products",
+      "element": "Product: 풀패키지 세트",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/products",
+      "element": "Product: 라이트 솔로 세트",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/products",
+      "element": "Section: 소모품 옵션",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/products",
+      "element": "Edit buttons",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/products",
+      "element": "Button: 옵션 추가",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/holidays",
+      "element": "Title: 공휴일 관리",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/holidays",
+      "element": "Year tab: 2025년",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/holidays",
+      "element": "Year tab: 2026년",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/holidays",
+      "element": "Year tab: 2027년",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/holidays",
+      "element": "Holidays found: 13",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/holidays",
+      "element": "Button: 공휴일 동기화",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/holidays",
+      "element": "Button: 임시 휴무 추가",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/holidays",
+      "element": "\"공휴일\" badges: 18",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/settings",
+      "element": "Title: 시스템 설정",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/settings",
+      "element": "Info banner",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/settings",
+      "element": "Group: 예약 엔진",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/settings",
+      "element": "Group: 결제",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/settings",
+      "element": "Setting: 사전 준비일",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/settings",
+      "element": "Setting: 사후 정비일",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/settings",
+      "element": "Setting: 최소 예약 선행일",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/settings",
+      "element": "Setting: 홀딩 유효시간",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/settings",
+      "element": "Setting inputs (count: 4)",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/settings",
+      "element": "Button: 저장",
+      "result": "PASS"
+    },
+    {
+      "page": "/admin/settings",
+      "element": "Button: 초기화",
+      "result": "PASS"
+    },
+    {
+      "page": "/ (design)",
+      "element": "Nav background: rgb(58, 90, 58)",
+      "result": "PASS - moss green"
+    },
+    {
+      "page": "/ (design)",
+      "element": "Body background: rgb(247, 243, 236)",
+      "result": "INFO"
+    },
+    {
+      "page": "/",
+      "element": "Broken images check (0 broken)",
+      "result": "PASS"
+    },
+    {
+      "page": "/products",
+      "element": "Broken images check (0 broken)",
+      "result": "PASS"
+    },
+    {
+      "page": "/products/1",
+      "element": "Broken images check (0 broken)",
+      "result": "PASS"
+    },
+    {
+      "page": "/auth/login",
+      "element": "Broken images check (0 broken)",
+      "result": "PASS"
+    },
+    {
+      "page": "/auth/signup",
+      "element": "Broken images check (0 broken)",
+      "result": "PASS"
+    },
+    {
+      "page": "/ (mobile)",
+      "element": "Horizontal overflow",
+      "result": "PASS"
+    },
+    {
+      "page": "/ (mobile)",
+      "element": "Small text check",
+      "result": "PASS"
+    },
+    {
+      "page": "/ (mobile)",
+      "element": "Small touch targets: 3",
+      "result": "WARN"
+    },
+    {
+      "page": "/products (mobile)",
+      "element": "Horizontal overflow",
+      "result": "PASS"
+    },
+    {
+      "page": "/products (mobile)",
+      "element": "Small text check",
+      "result": "PASS"
+    },
+    {
+      "page": "/products (mobile)",
+      "element": "Small touch targets: 3",
+      "result": "WARN"
+    },
+    {
+      "page": "/products/1 (mobile)",
+      "element": "Horizontal overflow",
+      "result": "PASS"
+    },
+    {
+      "page": "/products/1 (mobile)",
+      "element": "Small text check",
+      "result": "PASS"
+    },
+    {
+      "page": "/products/1 (mobile)",
+      "element": "Small touch targets: 3",
+      "result": "WARN"
+    },
+    {
+      "page": "/auth/login (mobile)",
+      "element": "Horizontal overflow",
+      "result": "PASS"
+    },
+    {
+      "page": "/auth/login (mobile)",
+      "element": "Small text check",
+      "result": "PASS"
+    },
+    {
+      "page": "/auth/login (mobile)",
+      "element": "Small touch targets: 1",
+      "result": "WARN"
+    },
+    {
+      "page": "/auth/signup (mobile)",
+      "element": "Horizontal overflow",
+      "result": "PASS"
+    },
+    {
+      "page": "/auth/signup (mobile)",
+      "element": "Small text check",
+      "result": "PASS"
+    },
+    {
+      "page": "/auth/signup (mobile)",
+      "element": "Small touch targets: 1",
+      "result": "WARN"
+    }
+  ],
+  "summary": {
+    "total": 174,
+    "passed": 156,
+    "failed": 1,
+    "notFound": 2,
+    "warn": 11
+  }
+}

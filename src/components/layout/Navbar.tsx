@@ -111,7 +111,7 @@ export function Navbar() {
                 로그인
               </Link>
             )}
-            <button onClick={() => setMobileOpen(!mobileOpen)} className="text-cream/70">
+            <button onClick={() => setMobileOpen(!mobileOpen)} className="w-11 h-11 flex items-center justify-center text-cream/70">
               {mobileOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
@@ -125,7 +125,7 @@ export function Navbar() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className="block text-sm text-cream/70 hover:text-cream py-1"
+                className="flex items-center min-h-[44px] text-sm text-cream/70 hover:text-cream"
               >
                 {link.label}
               </Link>
@@ -135,7 +135,7 @@ export function Navbar() {
                 <Link
                   href="/my"
                   onClick={() => setMobileOpen(false)}
-                  className="block text-sm text-cream/70 hover:text-cream py-1"
+                  className="flex items-center min-h-[44px] text-sm text-cream/70 hover:text-cream"
                 >
                   마이페이지
                 </Link>
@@ -143,7 +143,7 @@ export function Navbar() {
                   <Link
                     href="/admin"
                     onClick={() => setMobileOpen(false)}
-                    className="block text-sm text-cream/70 hover:text-cream py-1"
+                    className="flex items-center min-h-[44px] text-sm text-cream/70 hover:text-cream"
                   >
                     관리자
                   </Link>
@@ -153,7 +153,7 @@ export function Navbar() {
             <Link
               href="/products"
               onClick={() => setMobileOpen(false)}
-              className="block text-sm bg-olive text-white text-center py-2 rounded-md font-semibold mt-2"
+              className="flex items-center justify-center min-h-[44px] text-sm bg-olive text-white text-center rounded-md font-semibold mt-2"
             >
               예약하기
             </Link>

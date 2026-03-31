@@ -74,7 +74,7 @@ export default function SignupPage() {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full px-3 py-2 border border-beige rounded-lg text-sm bg-cream focus:outline-none focus:border-olive"
+                className="w-full px-3 py-2 min-h-[44px] border border-beige rounded-lg text-sm bg-cream focus:outline-none focus:border-olive"
                 placeholder="홍길동"
                 required
               />
@@ -85,7 +85,7 @@ export default function SignupPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-3 py-2 border border-beige rounded-lg text-sm bg-cream focus:outline-none focus:border-olive"
+                className="w-full px-3 py-2 min-h-[44px] border border-beige rounded-lg text-sm bg-cream focus:outline-none focus:border-olive"
                 placeholder="email@example.com"
                 required
               />
@@ -96,7 +96,7 @@ export default function SignupPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-3 py-2 border border-beige rounded-lg text-sm bg-cream focus:outline-none focus:border-olive"
+                className="w-full px-3 py-2 min-h-[44px] border border-beige rounded-lg text-sm bg-cream focus:outline-none focus:border-olive"
                 placeholder="6자 이상"
                 minLength={6}
                 required
@@ -105,7 +105,7 @@ export default function SignupPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-olive text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-olive/90 disabled:opacity-50"
+              className="w-full bg-olive text-white py-2.5 min-h-[44px] rounded-lg font-semibold text-sm hover:bg-olive/90 disabled:opacity-50"
             >
               {loading ? '가입 중...' : '가입하기'}
             </button>

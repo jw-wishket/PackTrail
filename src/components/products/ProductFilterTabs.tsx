@@ -21,7 +21,7 @@ export function ProductFilterTabs({ selected, onChange }: Props) {
           key={f.value}
           onClick={() => onChange(f.value)}
           className={cn(
-            'text-sm px-4 py-1.5 rounded-full font-semibold transition-colors',
+            'text-sm px-4 py-1.5 min-h-[36px] rounded-full font-semibold transition-colors',
             selected === f.value
               ? 'bg-moss text-white'
               : 'bg-white text-sage border border-beige hover:border-sage'

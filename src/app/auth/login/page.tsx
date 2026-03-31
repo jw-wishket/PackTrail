@@ -59,7 +59,7 @@ export default function LoginPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-3 py-2 border border-beige rounded-lg text-sm bg-cream focus:outline-none focus:border-olive"
+                className="w-full px-3 py-2 min-h-[44px] border border-beige rounded-lg text-sm bg-cream focus:outline-none focus:border-olive"
                 placeholder="email@example.com"
                 required
               />
@@ -70,7 +70,7 @@ export default function LoginPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-3 py-2 border border-beige rounded-lg text-sm bg-cream focus:outline-none focus:border-olive"
+                className="w-full px-3 py-2 min-h-[44px] border border-beige rounded-lg text-sm bg-cream focus:outline-none focus:border-olive"
                 placeholder="비밀번호"
                 required
               />
@@ -78,7 +78,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-olive text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-olive/90 disabled:opacity-50"
+              className="w-full bg-olive text-white py-2.5 min-h-[44px] rounded-lg font-semibold text-sm hover:bg-olive/90 disabled:opacity-50"
             >
               {loading ? '로그인 중...' : '로그인'}
             </button>
@@ -92,7 +92,7 @@ export default function LoginPage() {
 
           <button
             onClick={handleKakaoLogin}
-            className="w-full py-2.5 rounded-lg font-semibold text-sm text-[#3C1E1E]"
+            className="w-full py-2.5 min-h-[44px] rounded-lg font-semibold text-sm text-[#3C1E1E]"
             style={{ backgroundColor: '#FEE500' }}
           >
             카카오로 시작하기

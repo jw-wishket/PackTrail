@@ -19,13 +19,14 @@ export function BookingStepIndicator({ currentStep, completedSteps }: BookingSte
   return (
     <>
       {/* Desktop: vertical sidebar */}
-      <div className="hidden lg:flex flex-col w-56 bg-white border-r border-beige p-6 gap-2">
+      <div className="hidden lg:flex flex-col w-56 bg-white border-r border-beige p-6 gap-2" aria-label="예약 단계">
         {STEPS.map((step) => {
           const isCompleted = completedSteps.includes(step.number);
           const isActive = currentStep === step.number;
           return (
             <div
               key={step.number}
+              aria-current={isActive ? 'step' : undefined}
               className={cn(
                 'flex items-center gap-3 rounded-xl px-4 py-3 transition-colors',
                 isActive && 'bg-olive text-white',
@@ -50,12 +51,12 @@ export function BookingStepIndicator({ currentStep, completedSteps }: BookingSte
       </div>
 
       {/* Mobile: horizontal bar */}
-      <div className="lg:hidden flex items-center justify-between bg-white border-b border-beige px-4 py-3">
+      <div className="lg:hidden flex items-center justify-between bg-white border-b border-beige px-4 py-3" aria-label="예약 단계">
         {STEPS.map((step, i) => {
           const isCompleted = completedSteps.includes(step.number);
           const isActive = currentStep === step.number;
           return (
-            <div key={step.number} className="flex items-center gap-1">
+            <div key={step.number} className="flex items-center gap-1" aria-current={isActive ? 'step' : undefined}>
               <div className="flex flex-col items-center gap-1">
                 <span
                   className={cn(

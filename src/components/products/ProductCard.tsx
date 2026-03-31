@@ -27,7 +27,7 @@ export function ProductCard({ product }: Props) {
   const extraCount = (product.includes as string[]).length - 4;
 
   return (
-    <div className="bg-white rounded-xl overflow-hidden shadow-sm border border-beige">
+    <div role="article" aria-label={product.name} className="bg-white rounded-xl overflow-hidden shadow-sm border border-beige">
       {/* Image area */}
       <div className="h-44 sm:h-48 bg-gradient-to-br from-[#4A6B4A] to-[#5E7F5E] flex items-center justify-center relative">
         {Array.isArray(product.images) && (product.images as string[]).length > 0 ? (

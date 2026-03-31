@@ -46,7 +46,7 @@ export function Navbar() {
   ];
 
   return (
-    <nav className="bg-moss">
+    <nav className="bg-moss" aria-label="메인 네비게이션">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-14 items-center justify-between">
           {/* Logo + Desktop Nav */}
@@ -119,7 +119,7 @@ export function Navbar() {
                 로그인
               </Link>
             )}
-            <button onClick={() => setMobileOpen(!mobileOpen)} className="w-11 h-11 flex items-center justify-center text-cream/70">
+            <button onClick={() => setMobileOpen(!mobileOpen)} aria-label="메뉴 열기/닫기" aria-expanded={mobileOpen} className="w-11 h-11 flex items-center justify-center text-cream/70">
               {mobileOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>

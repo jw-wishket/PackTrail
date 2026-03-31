@@ -223,7 +223,7 @@ export default function AdminReservationDetailPage() {
               <ul className="mt-1 space-y-1">
                 {reservation.options.map((opt, i) => (
                   <li key={i} className="text-sm">
-                    {opt.option.name} x{opt.quantity} ({opt.unitPrice.toLocaleString()}원)
+                    {opt.option.name} x{opt.quantity} ({(opt.priceAtOrder ?? opt.option.price ?? 0).toLocaleString()}원)
                   </li>
                 ))}
               </ul>
@@ -234,11 +234,9 @@ export default function AdminReservationDetailPage() {
         {/* Payment / Delivery */}
         <div className="rounded-xl bg-white p-4 ring-1 ring-foreground/10 space-y-3">
           <h2 className="text-sm font-semibold border-b pb-2">결제 / 배송</h2>
-          <InfoRow label="기본 금액" value={`${reservation.basePrice.toLocaleString()}원`} />
-          <InfoRow label="옵션 금액" value={`${reservation.optionsPrice.toLocaleString()}원`} />
           <InfoRow
             label="총 결제금액"
-            value={`${reservation.totalPrice.toLocaleString()}원`}
+            value={`${(reservation.totalPrice ?? 0).toLocaleString()}원`}
             bold
           />
           {reservation.paymentId && (
@@ -247,8 +245,8 @@ export default function AdminReservationDetailPage() {
           {reservation.deliveryAddress && (
             <InfoRow label="배송 주소" value={reservation.deliveryAddress} />
           )}
-          {reservation.deliveryPhone && (
-            <InfoRow label="배송 연락처" value={reservation.deliveryPhone} />
+          {reservation.user?.phone && (
+            <InfoRow label="배송 연락처" value={reservation.user.phone} />
           )}
           {reservation.deliveryMemo && (
             <InfoRow label="배송 메모" value={reservation.deliveryMemo} />
